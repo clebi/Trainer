@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.clebi.trainer.ui.home.HomeFragment"
+        android:label="@string/menu_home" />
+    <fragment
+        android:id="@+id/trainer_config"
+        android:name="com.clebi.trainer.ui.config.TrainerConfigFragment"
+        android:label="fragment_trainer_config"
+        tools:layout="@layout/fragment_trainer_config" >
+        <action
+            android:id="@+id/action_trainer_config_to_trainerSearchFragment"
+            app:destination="@id/trainerSearchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trainerSearchFragment"
+        android:name="com.clebi.trainer.ui.config.TrainerSearchFragment"
+        android:label="TrainerSearchFragment" />
+
+</navigation>
