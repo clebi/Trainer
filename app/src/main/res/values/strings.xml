@@ -9,6 +9,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_trainer_config">Trainer configuration</string>
+    <string name="btle_disable_warning">Bluetooth is disabled !</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="trainer_search_btn">Search trainers</string>
