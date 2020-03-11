@@ -26,7 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".WahooTrainerService" android:exported="false"></service>
+        <service android:name="com.clebi.trainer.devices.wahoo.WahooTrainerService" android:exported="false"></service>
     </application>
 
 </manifest>

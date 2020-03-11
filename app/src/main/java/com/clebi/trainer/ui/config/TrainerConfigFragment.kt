@@ -8,9 +8,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.clebi.trainer.R
-import com.clebi.trainer.WahooTrainerService
+import com.clebi.trainer.devices.wahoo.WahooTrainerService
 import com.clebi.trainer.model.NetworkState
 import com.clebi.trainer.model.NetworkType
 
@@ -21,8 +25,14 @@ import com.clebi.trainer.model.NetworkType
  */
 class TrainerConfigFragment : Fragment() {
 
+    companion object {
+        private const val TAG = "TrainerConfigFragment"
+    }
+
     /** The trainer service */
     private lateinit var configService: WahooTrainerService
+
+    private val devicesConfigModel: DevicesConfigModel by activityViewModels()
 
     /**
      * Listener for network changes,
@@ -60,6 +70,15 @@ class TrainerConfigFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_trainer_config, container, false)
         val searchBtn = view.findViewById<Button>(R.id.trainer_search_btn)
         searchBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.trainerSearchFragment))
+        val connectedDeviceListAdapter = ConnectedDeviceListAdapter(devicesConfigModel.connectedDevices.value!!)
+        view.findViewById<RecyclerView>(R.id.connected_devices).apply {
+            adapter = connectedDeviceListAdapter
+            layoutManager = LinearLayoutManager(this.context)
+        }
+        devicesConfigModel.connectedDevices.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "devices: ${it.count()}")
+            connectedDeviceListAdapter.setDevices(it)
+        })
         return view
     }
 

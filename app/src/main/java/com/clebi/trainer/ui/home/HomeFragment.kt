@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.clebi.trainer.R
-import com.clebi.trainer.WahooTrainerService
+import com.clebi.trainer.devices.wahoo.WahooTrainerService
 
 class HomeFragment : Fragment() {
 

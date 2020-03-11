@@ -1,4 +1,4 @@
-package com.clebi.trainer
+package com.clebi.trainer.devices.wahoo
 
 import android.app.Service
 import android.content.Intent
@@ -114,7 +114,7 @@ class WahooTrainerService : Service() {
             Log.d(TAG, "discovered $params")
             val type = sensorTypesToDeviceTypes[params.sensorType] ?: return
             discoveredListeners.forEach {
-                it(Device(params.id, params.antId, type, params.name))
+                it(Device(params.id, params.antId, type, params.name, params))
             }
         }
 
@@ -122,7 +122,8 @@ class WahooTrainerService : Service() {
 
     private lateinit var hardwareConnector: HardwareConnector
     private val discoveredListeners = mutableListOf<DiscoveredListener>()
-    private val searchListener = SearchListener(this.discoveredListeners)
+    private val searchListener =
+        SearchListener(this.discoveredListeners)
     private val serviceListener = ServiceListener();
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -145,8 +146,18 @@ class WahooTrainerService : Service() {
         hardwareConnector.stopDiscovery(searchListener, HardwareConnectorTypes.NetworkType.BTLE)
     }
 
+    fun connectToDevice(device: Device): WahooConnectedDevice {
+        val connectedDevice = WahooConnectedDevice(device)
+        hardwareConnector.requestSensorConnection(device.params as ConnectionParams, connectedDevice)
+        return connectedDevice
+    }
+
     fun listenDevicesDiscovery(listener: DiscoveredListener) {
         discoveredListeners.add(listener)
+    }
+
+    fun unlistenDevicesDiscovery(listener: DiscoveredListener) {
+        discoveredListeners.remove(listener)
     }
 
     /**
