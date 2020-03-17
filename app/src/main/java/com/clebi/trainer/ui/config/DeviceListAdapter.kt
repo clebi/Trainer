@@ -16,9 +16,11 @@ class DeviceListAdapter(private var devices: List<Device>, private val addCallba
     RecyclerView.Adapter<DeviceListAdapter.DeviceListViewHolder>() {
     class DeviceListViewHolder(layout: LinearLayout) : RecyclerView.ViewHolder(layout) {
         /** the name of the device */
-        val trainerSearchName = layout.findViewById<TextView>(R.id.trainer_search_name)!!
+        val trainerSearchName = layout.findViewById<TextView>(R.id.trainer_name)!!
+
         /** the id of the device */
-        val trainerSearchId = layout.findViewById<TextView>(R.id.trainer_search_id)!!
+        val trainerSearchId = layout.findViewById<TextView>(R.id.trainer_id)!!
+
         /** the button to add the device to config. */
         val trainerSearchBtn = layout.findViewById<Button>(R.id.trainer_search_btn)!!
     }

@@ -70,7 +70,12 @@ class TrainerConfigFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_trainer_config, container, false)
         val searchBtn = view.findViewById<Button>(R.id.trainer_search_btn)
         searchBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.trainerSearchFragment))
-        val connectedDeviceListAdapter = ConnectedDeviceListAdapter(devicesConfigModel.connectedDevices.value!!)
+        val connectedDeviceListAdapter = ConnectedDeviceListAdapter(
+            devicesConfigModel.connectedDevices.value!!,
+            resources.getString(R.string.trainer_status_not_connected),
+            resources.getString(R.string.trainer_status_connected),
+            resources.getString(R.string.trainer_status_connecting)
+        )
         view.findViewById<RecyclerView>(R.id.connected_devices).apply {
             adapter = connectedDeviceListAdapter
             layoutManager = LinearLayoutManager(this.context)

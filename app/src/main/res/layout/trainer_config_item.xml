@@ -9,7 +9,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/trainer_search_name"
+            android:id="@+id/trainer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -17,7 +17,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/trainer_search_id"
+            android:id="@+id/trainer_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -25,5 +25,13 @@
             android:textSize="12sp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/trainer_status"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Status"
+        android:textAlignment="center" />
 
 </LinearLayout>
