@@ -64,12 +64,12 @@ class WahooTrainerService : Service() {
             networkState: HardwareConnectorEnums.HardwareConnectorState
         ) {
             Log.d(TAG, "network type: $networkType - $networkState")
-            val networkType = networkTypesConverter[networkType] ?: return
-            val networkState = networkStateConverter[networkState] ?: throw Error("unable to get network state")
-            lastNetworkState[networkType] = networkState
+            val type = networkTypesConverter[networkType] ?: return
+            val state = networkStateConverter[networkState] ?: throw Error("unable to get network state")
+            lastNetworkState[type] = state
             Log.d(TAG, "state listeners: ${listeners.count()}")
             listeners.forEach {
-                it(networkType, networkState)
+                it(type, state)
             }
         }
 
