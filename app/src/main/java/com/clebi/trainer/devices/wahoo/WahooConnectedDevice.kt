@@ -21,11 +21,12 @@ class WahooConnectedDevice(override val device: Device) : ConnectedDevice, Senso
     private val connectionStatusListeners = mutableListOf<ConnectionStatusCallback>()
 
     /** status if the device */
-    override var status: DeviceConnectionStatus by Delegates.observable(DeviceConnectionStatus.NOT_CONNECTED) { _, _, new ->
-        connectionStatusListeners.forEach {
-            it(new)
+    override var status: DeviceConnectionStatus
+        by Delegates.observable(DeviceConnectionStatus.NOT_CONNECTED) { _, _, new ->
+            connectionStatusListeners.forEach {
+                it(new)
+            }
         }
-    }
 
     /**
      * Add a listener for status.

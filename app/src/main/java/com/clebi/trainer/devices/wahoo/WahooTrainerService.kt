@@ -93,9 +93,8 @@ class WahooTrainerService : Service() {
          * @param listener listener to remove
          */
         fun removeListener(listener: NetworkChangeListener) {
-            listeners.remove(listener);
+            listeners.remove(listener)
         }
-
     }
 
     class SearchListener(
@@ -117,14 +116,13 @@ class WahooTrainerService : Service() {
                 it(Device(params.id, params.antId, type, params.name, params))
             }
         }
-
     }
 
     private lateinit var hardwareConnector: HardwareConnector
     private val discoveredListeners = mutableListOf<DiscoveredListener>()
     private val searchListener =
         SearchListener(this.discoveredListeners)
-    private val serviceListener = ServiceListener();
+    private val serviceListener = ServiceListener()
 
     override fun onBind(intent: Intent?): IBinder? {
         return null

@@ -21,7 +21,6 @@ data class TestConnectedDevice(override val device: Device, override var status:
     }
 }
 
-
 class DevicesConfigModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
