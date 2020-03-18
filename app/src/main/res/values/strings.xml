@@ -16,4 +16,7 @@
     <string name="trainer_status_not_connected">Not connected</string>
     <string name="trainer_status_connecting">Connecting...</string>
     <string name="trainer_status_connected">Connected</string>
+    <string name="trainer_capa_unknown">Unknown</string>
+    <string name="trainer_capa_bike_trainer">Bike trainer</string>
+    <string name="trainer_capa_bike_power">Bike power</string>
 </resources>

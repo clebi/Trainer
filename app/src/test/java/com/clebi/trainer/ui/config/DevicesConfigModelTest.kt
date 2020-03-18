@@ -1,8 +1,10 @@
 package com.clebi.trainer.ui.config
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.clebi.trainer.devices.CapabilitiesChangeCallback
 import com.clebi.trainer.devices.ConnectedDevice
-import com.clebi.trainer.devices.ConnectionStatusCallback
+import com.clebi.trainer.devices.ConnectedDeviceListener
+import com.clebi.trainer.devices.DeviceCapability
 import com.clebi.trainer.devices.DeviceConnectionStatus
 import com.clebi.trainer.model.Device
 import com.clebi.trainer.model.DeviceType
@@ -10,13 +12,25 @@ import com.google.common.truth.Truth
 import org.junit.Rule
 import org.junit.Test
 
-data class TestConnectedDevice(override val device: Device, override var status: DeviceConnectionStatus) :
+data class TestConnectedDevice(
+    override val device: Device,
+    override var status: DeviceConnectionStatus,
+    override var capabilities: List<DeviceCapability>
+) :
     ConnectedDevice {
-    override fun addConnectionStatusListeners(listener: ConnectionStatusCallback) {
+    override fun addListener(listener: ConnectedDeviceListener) {
         TODO("Not yet implemented")
     }
 
-    override fun removeConnectionStatusListeners(listener: ConnectionStatusCallback) {
+    override fun removeListener(listener: ConnectedDeviceListener) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addCapabilitiesListeners(listener: CapabilitiesChangeCallback) {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeCapabilitiesListeners(listener: CapabilitiesChangeCallback) {
         TODO("Not yet implemented")
     }
 }
@@ -43,7 +57,8 @@ class DevicesConfigModelTest {
         model.addConnectedDevices(
             TestConnectedDevice(
                 testDevice,
-                DeviceConnectionStatus.CONNECTED
+                DeviceConnectionStatus.CONNECTED,
+                listOf()
             )
         )
         Truth.assertThat(model.connectedDevices.value).hasSize(1)
@@ -51,7 +66,8 @@ class DevicesConfigModelTest {
             .contains(
                 TestConnectedDevice(
                     testDevice,
-                    DeviceConnectionStatus.CONNECTED
+                    DeviceConnectionStatus.CONNECTED,
+                    listOf()
                 )
             )
     }

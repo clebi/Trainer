@@ -1,6 +1,5 @@
 package com.clebi.trainer.ui.config
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -8,24 +7,22 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.clebi.trainer.R
 import com.clebi.trainer.devices.ConnectedDevice
-import com.clebi.trainer.devices.ConnectionStatusCallback
+import com.clebi.trainer.devices.ConnectedDeviceListener
+import com.clebi.trainer.devices.DeviceCapability
 import com.clebi.trainer.devices.DeviceConnectionStatus
 
 /**
  * DeviceListAdapter is the list adapter for the search of trainers.
  */
 class ConnectedDeviceListAdapter(
-    private var connectedDevices: List<ConnectedDevice>,
-    private val statusNotConnectedStr: String,
-    private val statusConnectedStr: String,
-    private val statusConnectingStr: String
+    private var connectedDevices: List<ConnectedDevice>
 ) :
     RecyclerView.Adapter<ConnectedDeviceListAdapter.DeviceListViewHolder>() {
     companion object {
         private const val TAG = "ConnectedDeviceListAdapter"
     }
 
-    private val statusListeners = mutableListOf<ConnectionStatusCallback>()
+    private val deviceListeners = mutableListOf<ConnectedDeviceListener>()
 
     class DeviceListViewHolder(layout: LinearLayout) : RecyclerView.ViewHolder(layout) {
         /** the name of the device */
@@ -36,6 +33,9 @@ class ConnectedDeviceListAdapter(
 
         /** status of the device */
         val trainerStatus = layout.findViewById<TextView>(R.id.trainer_status)!!
+
+        /** Capabilities of the device */
+        val trainerCapabilities = layout.findViewById<TextView>(R.id.trainer_capa)!!
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceListViewHolder {
@@ -46,15 +46,23 @@ class ConnectedDeviceListAdapter(
     override fun getItemCount() = connectedDevices.count()
 
     override fun onBindViewHolder(holder: DeviceListViewHolder, position: Int) {
+        val resources = holder.itemView.resources
         val connectedDevice = connectedDevices[position]
         val statusTxt = when (connectedDevice.status) {
-            DeviceConnectionStatus.CONNECTING -> statusConnectingStr
-            DeviceConnectionStatus.CONNECTED -> statusConnectedStr
-            else -> statusNotConnectedStr
+            DeviceConnectionStatus.CONNECTING -> resources.getString(R.string.trainer_status_connecting)
+            DeviceConnectionStatus.CONNECTED -> resources.getString(R.string.trainer_status_connected)
+            else -> resources.getString(R.string.trainer_status_not_connected)
         }
         holder.trainerId.text = connectedDevice.device.id
         holder.trainerName.text = connectedDevice.device.name
         holder.trainerStatus.text = statusTxt
+        if (connectedDevice.capabilities.contains(DeviceCapability.BIKE_TRAINER)) {
+            holder.trainerCapabilities.text = resources.getString(R.string.trainer_capa_bike_trainer)
+        } else if (connectedDevice.capabilities.contains(DeviceCapability.BIKE_POWER)) {
+            holder.trainerCapabilities.text = resources.getString(R.string.trainer_capa_bike_power)
+        } else {
+            holder.trainerCapabilities.text = resources.getString(R.string.trainer_capa_unknown)
+        }
     }
 
     /**
@@ -63,15 +71,14 @@ class ConnectedDeviceListAdapter(
     fun setDevices(devices: List<ConnectedDevice>) {
         connectedDevices = devices
         connectedDevices.forEachIndexed { index, connectedDevice ->
-            if (statusListeners.count() > index) {
-                connectedDevice.removeConnectionStatusListeners(statusListeners[index])
+            if (deviceListeners.count() > index) {
+                connectedDevice.removeListener(deviceListeners[index])
             }
-            val callback = { status: DeviceConnectionStatus ->
-                Log.d(TAG, "status changed: $status")
+            val listener = { _: ConnectedDevice ->
                 notifyItemChanged(index)
             }
-            statusListeners.add(callback)
-            connectedDevice.addConnectionStatusListeners(callback)
+            connectedDevice.addListener(listener)
+            deviceListeners.add(listener)
         }
         this.notifyDataSetChanged()
     }

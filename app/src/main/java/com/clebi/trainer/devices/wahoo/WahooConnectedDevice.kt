@@ -2,7 +2,8 @@ package com.clebi.trainer.devices.wahoo
 
 import android.util.Log
 import com.clebi.trainer.devices.ConnectedDevice
-import com.clebi.trainer.devices.ConnectionStatusCallback
+import com.clebi.trainer.devices.ConnectedDeviceListener
+import com.clebi.trainer.devices.DeviceCapability
 import com.clebi.trainer.devices.DeviceConnectionStatus
 import com.clebi.trainer.model.Device
 import com.wahoofitness.connector.HardwareConnectorEnums
@@ -18,31 +19,41 @@ class WahooConnectedDevice(override val device: Device) : ConnectedDevice, Senso
         private const val TAG = "WahooConnectedDevice"
     }
 
-    private val connectionStatusListeners = mutableListOf<ConnectionStatusCallback>()
+    /**
+     * List of all listeners registered.
+     */
+    private val listeners = mutableListOf<ConnectedDeviceListener>()
 
     /** status if the device */
     override var status: DeviceConnectionStatus
         by Delegates.observable(DeviceConnectionStatus.NOT_CONNECTED) { _, _, new ->
-            connectionStatusListeners.forEach {
-                it(new)
+            listeners.forEach {
+                it(this)
             }
         }
 
-    /**
-     * Add a listener for status.
-     * @param listener listener to add.
-     */
-    override fun addConnectionStatusListeners(listener: ConnectionStatusCallback) {
-        connectionStatusListeners.add(listener)
-        listener(status)
+    /** capabilities of the device */
+    override var capabilities: List<DeviceCapability> by Delegates.observable(listOf()) { _, _, _ ->
+        listeners.forEach {
+            it(this)
+        }
     }
 
     /**
-     * Remove status listener.
+     * Add a listener.
+     * @param listener listener to add.
+     */
+    override fun addListener(listener: ConnectedDeviceListener) {
+        listeners.add(listener)
+        listener(this)
+    }
+
+    /**
+     * Remove listener.
      * @param listener listener to remove.
      */
-    override fun removeConnectionStatusListeners(listener: ConnectionStatusCallback) {
-        connectionStatusListeners.remove(listener)
+    override fun removeListener(listener: ConnectedDeviceListener) {
+        listeners.remove(listener)
     }
 
     /**
@@ -81,5 +92,15 @@ class WahooConnectedDevice(override val device: Device) : ConnectedDevice, Senso
      */
     override fun onNewCapabilityDetected(connection: SensorConnection, capability: Capability.CapabilityType) {
         Log.d(TAG, "onNewCapabilityDetected: $connection - $capability")
+        val deviceCapability = when (capability) {
+            Capability.CapabilityType.BikeTrainer -> DeviceCapability.BIKE_TRAINER
+            Capability.CapabilityType.BikePower -> DeviceCapability.BIKE_POWER
+            else -> null
+        }
+            ?: return
+        val newCapabilities = capabilities.toMutableList()
+        newCapabilities.add(deviceCapability)
+        Log.d(TAG, "onNewCapabilityDetected: new capabilities: $newCapabilities")
+        capabilities = newCapabilities
     }
 }

@@ -5,7 +5,7 @@ import com.clebi.trainer.model.Device
 /**
  * Callback for status change.
  */
-typealias ConnectionStatusCallback = (status: DeviceConnectionStatus) -> Unit
+typealias ConnectedDeviceListener = (device: ConnectedDevice) -> Unit
 
 /**
  * DeviceConnectionStatus contains all possible connection status.
@@ -15,12 +15,20 @@ enum class DeviceConnectionStatus {
 }
 
 /**
+ * DeviceCapability lists all capabilities a device can have.
+ */
+enum class DeviceCapability {
+    BIKE_TRAINER, BIKE_POWER;
+}
+
+/**
  * ConnectedDevice responsible for status of the connected device.
  */
 interface ConnectedDevice {
     val device: Device
     var status: DeviceConnectionStatus
+    var capabilities: List<DeviceCapability>
 
-    fun addConnectionStatusListeners(listener: ConnectionStatusCallback)
-    fun removeConnectionStatusListeners(listener: ConnectionStatusCallback)
+    fun addListener(listener: ConnectedDeviceListener)
+    fun removeListener(listener: ConnectedDeviceListener)
 }
