@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.clebi.trainer.R
 import com.clebi.trainer.devices.wahoo.WahooTrainerService
-import com.clebi.trainer.model.Device
+import com.clebi.trainer.devices.Device
 
 /**
  * TrainerSearchFragment manages the search of training devices.

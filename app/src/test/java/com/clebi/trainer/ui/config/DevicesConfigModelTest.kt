@@ -6,8 +6,8 @@ import com.clebi.trainer.devices.ConnectedDevice
 import com.clebi.trainer.devices.ConnectedDeviceListener
 import com.clebi.trainer.devices.DeviceCapability
 import com.clebi.trainer.devices.DeviceConnectionStatus
-import com.clebi.trainer.model.Device
-import com.clebi.trainer.model.DeviceType
+import com.clebi.trainer.devices.Device
+import com.clebi.trainer.devices.DeviceType
 import com.google.common.truth.Truth
 import org.junit.Rule
 import org.junit.Test
@@ -43,16 +43,38 @@ class DevicesConfigModelTest {
     fun testAddDevice() {
         val testParams = Object()
         val model = DevicesConfigModel()
-        model.addSearchDevice(Device("test", 123456, DeviceType.TRAINER, "test_name", testParams))
+        model.addSearchDevice(
+            Device(
+                "test",
+                123456,
+                DeviceType.TRAINER,
+                "test_name",
+                testParams
+            )
+        )
         Truth.assertThat(model.searchDevices.value).hasSize(1)
         Truth.assertThat(model.searchDevices.value)
-            .contains(Device("test", 123456, DeviceType.TRAINER, "test_name", testParams))
+            .contains(
+                Device(
+                    "test",
+                    123456,
+                    DeviceType.TRAINER,
+                    "test_name",
+                    testParams
+                )
+            )
     }
 
     @Test
     fun testAddConnectedDevice() {
         val testParams = Object()
-        val testDevice = Device("test", 123456, DeviceType.TRAINER, "test_name", testParams)
+        val testDevice = Device(
+            "test",
+            123456,
+            DeviceType.TRAINER,
+            "test_name",
+            testParams
+        )
         val model = DevicesConfigModel()
         model.addConnectedDevices(
             TestConnectedDevice(

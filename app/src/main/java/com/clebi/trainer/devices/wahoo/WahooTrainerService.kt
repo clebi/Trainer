@@ -4,10 +4,10 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import com.clebi.trainer.model.Device
-import com.clebi.trainer.model.DeviceType
-import com.clebi.trainer.model.NetworkState
-import com.clebi.trainer.model.NetworkType
+import com.clebi.trainer.devices.Device
+import com.clebi.trainer.devices.DeviceType
+import com.clebi.trainer.devices.NetworkState
+import com.clebi.trainer.devices.NetworkType
 import com.wahoofitness.connector.HardwareConnector
 import com.wahoofitness.connector.HardwareConnector.Listener
 import com.wahoofitness.connector.HardwareConnectorEnums
@@ -113,7 +113,15 @@ class WahooTrainerService : Service() {
             Log.d(TAG, "discovered $params")
             val type = sensorTypesToDeviceTypes[params.sensorType] ?: return
             discoveredListeners.forEach {
-                it(Device(params.id, params.antId, type, params.name, params))
+                it(
+                    Device(
+                        params.id,
+                        params.antId,
+                        type,
+                        params.name,
+                        params
+                    )
+                )
             }
         }
     }

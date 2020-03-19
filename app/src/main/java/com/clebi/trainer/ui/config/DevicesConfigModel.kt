@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.clebi.trainer.devices.ConnectedDevice
-import com.clebi.trainer.model.Device
+import com.clebi.trainer.devices.Device
 
 /**
  * ConfigModel holds information for the TrainerSearchFragment view.

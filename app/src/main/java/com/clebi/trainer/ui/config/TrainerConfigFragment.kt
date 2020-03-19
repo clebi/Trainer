@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.clebi.trainer.R
 import com.clebi.trainer.devices.wahoo.WahooTrainerService
-import com.clebi.trainer.model.NetworkState
-import com.clebi.trainer.model.NetworkType
+import com.clebi.trainer.devices.NetworkState
+import com.clebi.trainer.devices.NetworkType
 
 /**
  * TrainerConfigFragment is responsible for the trainers configuration

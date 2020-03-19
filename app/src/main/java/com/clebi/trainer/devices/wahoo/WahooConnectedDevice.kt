@@ -5,7 +5,7 @@ import com.clebi.trainer.devices.ConnectedDevice
 import com.clebi.trainer.devices.ConnectedDeviceListener
 import com.clebi.trainer.devices.DeviceCapability
 import com.clebi.trainer.devices.DeviceConnectionStatus
-import com.clebi.trainer.model.Device
+import com.clebi.trainer.devices.Device
 import com.wahoofitness.connector.HardwareConnectorEnums
 import com.wahoofitness.connector.capabilities.Capability
 import com.wahoofitness.connector.conn.connections.SensorConnection

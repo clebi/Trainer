@@ -7,7 +7,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.clebi.trainer.R
-import com.clebi.trainer.model.Device
+import com.clebi.trainer.devices.Device
 
 /**
  * DeviceListAdapter is the list adapter for the search of trainers.

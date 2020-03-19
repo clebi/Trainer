@@ -1,4 +1,4 @@
-package com.clebi.trainer.model
+package com.clebi.trainer.devices
 
 enum class DeviceType {
     TRAINER, POWER
