@@ -12,6 +12,7 @@
 
     <!--Training fragment-->
     <string name="menu_training">Training</string>
+    <string name="training_duration_lbl">Duration: </string>
 
     <!--Settings fragment-->
     <string name="menu_settings">Settings</string>
