@@ -1,4 +1,4 @@
-package com.clebi.trainer.ui.home
+package com.clebi.trainer.ui.trainings
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.clebi.trainer.R
 import com.clebi.trainer.devices.wahoo.WahooTrainerService
 
-class HomeFragment : Fragment() {
+class TrainingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -5,10 +5,13 @@
     <string name="nav_header_desc">Trainer app</string>
     <string name="action_settings">Settings</string>
 
-    <!--Home fragment-->
-    <string name="menu_home">Home</string>
+    <!--Trainings fragment-->
+    <string name="menu_trainings">Trainings</string>
     <string name="trainings_list_title">Trainings</string>
     <string name="trainings_new">Create training</string>
+
+    <!--Training fragment-->
+    <string name="menu_training">Training</string>
 
     <!--Settings fragment-->
     <string name="menu_settings">Settings</string>
@@ -24,4 +27,7 @@
     <!--Search fragment-->
     <string name="menu_search">Search</string>
     <string name="trainer_search_add">Add device</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

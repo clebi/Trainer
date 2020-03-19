@@ -3,12 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_trainings">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.clebi.trainer.ui.home.HomeFragment"
-        android:label="@string/menu_home" />
+        android:id="@+id/nav_trainings"
+        android:name="com.clebi.trainer.ui.trainings.TrainingsFragment"
+        android:label="@string/menu_trainings">
+        <action
+            android:id="@+id/action_nav_home_to_trainingFragment"
+            app:destination="@id/trainingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/trainer_config"
         android:name="com.clebi.trainer.ui.config.TrainerConfigFragment"
@@ -22,5 +26,10 @@
         android:id="@+id/trainerSearchFragment"
         android:name="com.clebi.trainer.ui.config.TrainerSearchFragment"
         android:label="@string/menu_search" />
+    <fragment
+        android:id="@+id/trainingFragment"
+        android:name="com.clebi.trainer.ui.trainings.TrainingFragment"
+        android:label="@string/menu_training"
+        tools:layout="@layout/fragment_training" />
 
 </navigation>
