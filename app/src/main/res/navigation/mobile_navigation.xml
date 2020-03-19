@@ -12,8 +12,8 @@
     <fragment
         android:id="@+id/trainer_config"
         android:name="com.clebi.trainer.ui.config.TrainerConfigFragment"
-        android:label="fragment_trainer_config"
-        tools:layout="@layout/fragment_trainer_config" >
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_trainer_config">
         <action
             android:id="@+id/action_trainer_config_to_trainerSearchFragment"
             app:destination="@id/trainerSearchFragment" />
@@ -21,6 +21,6 @@
     <fragment
         android:id="@+id/trainerSearchFragment"
         android:name="com.clebi.trainer.ui.config.TrainerSearchFragment"
-        android:label="TrainerSearchFragment" />
+        android:label="@string/menu_search" />
 
 </navigation>

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.clebi.trainer.R
@@ -48,7 +49,7 @@ class TrainerSearchFragment : Fragment() {
             Log.d(TAG, "device add: ${device.name} - ${device.id}")
             val connectedDevice = configService.connectToDevice(device)
             devicesConfigModel.addConnectedDevices(connectedDevice)
-            activity!!.supportFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
         trainerSearchListView = view.findViewById<RecyclerView>(R.id.trainers_search_list).apply {
             adapter = trainerSearchListAdapter
