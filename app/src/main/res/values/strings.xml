@@ -13,6 +13,8 @@
     <!--Training fragment-->
     <string name="menu_training">Training</string>
     <string name="training_duration_lbl">Duration: </string>
+    <string name="training_step_add">Add new step</string>
+    <string name="training_step_num">Step %d</string>
 
     <!--Settings fragment-->
     <string name="menu_settings">Settings</string>
@@ -28,7 +30,4 @@
     <!--Search fragment-->
     <string name="menu_search">Search</string>
     <string name="trainer_search_add">Add device</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

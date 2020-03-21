@@ -30,6 +30,11 @@
         android:id="@+id/trainingFragment"
         android:name="com.clebi.trainer.ui.trainings.TrainingFragment"
         android:label="@string/menu_training"
-        tools:layout="@layout/fragment_training" />
+        tools:layout="@layout/fragment_training" >
+        <argument
+            android:name="training_positition"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 
 </navigation>

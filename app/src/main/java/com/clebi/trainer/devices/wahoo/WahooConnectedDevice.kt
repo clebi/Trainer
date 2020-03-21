@@ -26,7 +26,7 @@ class WahooConnectedDevice(override val device: Device) : ConnectedDevice, Senso
 
     /** status if the device */
     override var status: DeviceConnectionStatus
-        by Delegates.observable(DeviceConnectionStatus.NOT_CONNECTED) { _, _, new ->
+        by Delegates.observable(DeviceConnectionStatus.NOT_CONNECTED) { _, _, _ ->
             listeners.forEach {
                 it(this)
             }
