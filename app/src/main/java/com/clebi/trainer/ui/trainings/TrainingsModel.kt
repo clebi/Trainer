@@ -14,6 +14,16 @@ class TrainingsModel : ViewModel() {
     val trainings: LiveData<List<Training>> = _trainings
 
     /**
+     * Replace the list of trainings.
+     * @param trainings the new list of trainings.
+     */
+    fun setTrainings(trainings: List<Training>) {
+        _trainings.apply {
+            value = trainings
+        }
+    }
+
+    /**
      * Append training to the list of trainings.
      * @param training the training to append.
      * @return position of the newly inserted training.
