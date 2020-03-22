@@ -32,7 +32,7 @@
         android:label="@string/menu_training"
         tools:layout="@layout/fragment_training" >
         <argument
-            android:name="training_positition"
+            android:name="training_position"
             app:argType="integer"
             android:defaultValue="-1" />
     </fragment>

@@ -33,4 +33,13 @@ class TrainingStepsListAdapter(private var steps: List<TrainingStep>) :
         holder.itemView.step_duration.text = Format.formatDuration(step.duration)
         holder.itemView.step_power.text = "${step.power}W"
     }
+
+    /**
+     * Set new training steps list.
+     * @param steps new training steps.
+     */
+    fun setTrainingSteps(steps: List<TrainingStep>) {
+        this.steps = steps
+        notifyDataSetChanged()
+    }
 }

@@ -15,6 +15,10 @@
     <string name="training_duration_lbl">Duration: </string>
     <string name="training_step_add">Add new step</string>
     <string name="training_step_num">Step %d</string>
+    <string name="training_new_dialog_title">New training</string>
+    <string name="training_name_input_title">Training name: </string>
+    <string name="training_name_input">Name your training</string>
+    <string name="training_step_power">Power: </string>
 
     <!--Settings fragment-->
     <string name="menu_settings">Settings</string>

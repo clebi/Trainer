@@ -6,7 +6,6 @@
     android:orientation="vertical"
     tools:context=".ui.trainings.TrainingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/training_title"
         android:layout_width="match_parent"
@@ -23,7 +22,7 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <Button
-        android:id="@+id/traing_step_add"
+        android:id="@+id/training_step_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/training_step_add"
