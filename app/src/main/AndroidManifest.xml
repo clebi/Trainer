@@ -3,6 +3,7 @@
     package="com.clebi.trainer">
 
     <uses-feature android:name="android.hardware.bluetooth" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -26,7 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="com.clebi.trainer.devices.wahoo.WahooTrainerService" android:exported="false"></service>
+        <service
+            android:name="com.clebi.trainer.devices.wahoo.WahooTrainerService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

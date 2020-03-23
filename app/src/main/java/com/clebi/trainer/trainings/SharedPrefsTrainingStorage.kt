@@ -1,6 +1,6 @@
 package com.clebi.trainer.trainings
 
-import android.content.SharedPreferences
+import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -8,18 +8,24 @@ import com.google.gson.reflect.TypeToken
 /**
  * TrainingStorage is responsible for writing and reading trainings using shared preferences.
  */
-object TrainingStorage {
+class SharedPrefsTrainingStorage(context: Context) : TrainingsStorage {
 
-    private const val TAG = "TrainingStorage"
+    companion object {
+        private const val TAG = "TrainingStorage"
 
-    /** storage key for trainings */
-    private const val TRAININGS_KEY = "trainings_list_v1"
+        private const val PREFS_KEY = "trainings"
+
+        /** storage key for trainings */
+        private const val TRAININGS_KEY = "trainings_list_v1"
+    }
+
+    private val prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
 
     /**
      * Read the trainings.
-     * @param prefs shared preferences reference.
+     * @return the list of training
      */
-    fun read(prefs: SharedPreferences): List<Training> {
+    override fun read(): List<Training> {
         val gson = Gson()
         val json = prefs.getString(TRAININGS_KEY, "[]")
         Log.d(TAG, "read json: $json")
@@ -30,9 +36,8 @@ object TrainingStorage {
     /**
      * Write the trainings.
      * @param trainings trainings to write.
-     * @param editor the shared preferences editor.
      */
-    fun write(trainings: List<Training>, prefs: SharedPreferences) {
+    override fun write(trainings: List<Training>) {
         val gson = Gson()
         val json = gson.toJson(trainings)
         Log.d(TAG, "write json: $json")

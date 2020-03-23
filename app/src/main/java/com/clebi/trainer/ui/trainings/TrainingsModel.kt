@@ -4,23 +4,32 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.clebi.trainer.trainings.Training
+import com.clebi.trainer.trainings.TrainingsStorage
 
 /**
  * TrainingsModel contains fields for trainings views.
  */
-class TrainingsModel : ViewModel() {
+class TrainingsModel(private val trainingsStorage: TrainingsStorage) : ViewModel() {
 
     private val _trainings: MutableLiveData<List<Training>> = MutableLiveData(listOf())
     val trainings: LiveData<List<Training>> = _trainings
 
     /**
      * Replace the list of trainings.
-     * @param trainings the new list of trainings.
      */
-    fun setTrainings(trainings: List<Training>) {
+    fun readFromStorage() {
+        val trainings = trainingsStorage.read()
         _trainings.apply {
             value = trainings
         }
+    }
+
+    /**
+     * Save trainings to storage.
+     */
+    fun saveToStorage() {
+        val trainings = (_trainings.value ?: listOf())
+        trainingsStorage.write(trainings)
     }
 
     /**
@@ -45,6 +54,9 @@ class TrainingsModel : ViewModel() {
      */
     fun replaceTraining(position: Int, training: Training) {
         val trainings = (_trainings.value ?: listOf()).toMutableList()
+        if (position >= trainings.count()) {
+            throw IllegalArgumentException("position is outside of the trainings list")
+        }
         trainings[position] = training
         _trainings.apply {
             value = trainings

@@ -1,7 +1,6 @@
 package com.clebi.trainer.ui.trainings
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebi.trainer.R
 import com.clebi.trainer.devices.wahoo.WahooTrainerService
 import com.clebi.trainer.trainings.Training
-import com.clebi.trainer.trainings.TrainingStorage
 import kotlinx.android.synthetic.main.dialog_training_name.view.*
 import kotlinx.android.synthetic.main.fragment_trainings.view.*
 
@@ -33,9 +31,7 @@ class TrainingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val prefs = context!!.getSharedPreferences("trainings", Context.MODE_PRIVATE)
-        val trainings = TrainingStorage.read(prefs)
-        trainingsModel.setTrainings(trainings)
+        trainingsModel.readFromStorage()
         Intent(context, WahooTrainerService::class.java).also {
             activity?.startService(it)
         }
@@ -77,8 +73,7 @@ class TrainingsFragment : Fragment() {
     }
 
     override fun onPause() {
-        val prefs = context!!.getSharedPreferences("trainings", Context.MODE_PRIVATE)
-        TrainingStorage.write(trainingsModel.trainings.value!!, prefs)
+        trainingsModel.saveToStorage()
         super.onPause()
     }
 }

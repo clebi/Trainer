@@ -1,12 +1,11 @@
 package com.clebi.trainer.ui.config
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.clebi.trainer.devices.CapabilitiesChangeCallback
 import com.clebi.trainer.devices.ConnectedDevice
 import com.clebi.trainer.devices.ConnectedDeviceListener
+import com.clebi.trainer.devices.Device
 import com.clebi.trainer.devices.DeviceCapability
 import com.clebi.trainer.devices.DeviceConnectionStatus
-import com.clebi.trainer.devices.Device
 import com.clebi.trainer.devices.DeviceType
 import com.google.common.truth.Truth
 import org.junit.Rule
@@ -23,14 +22,6 @@ data class TestConnectedDevice(
     }
 
     override fun removeListener(listener: ConnectedDeviceListener) {
-        TODO("Not yet implemented")
-    }
-
-    override fun addCapabilitiesListeners(listener: CapabilitiesChangeCallback) {
-        TODO("Not yet implemented")
-    }
-
-    override fun removeCapabilitiesListeners(listener: CapabilitiesChangeCallback) {
         TODO("Not yet implemented")
     }
 }
