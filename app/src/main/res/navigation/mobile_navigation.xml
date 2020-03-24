@@ -35,6 +35,18 @@
             android:name="training_position"
             app:argType="integer"
             android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_trainingFragment_to_trainingExec"
+            app:destination="@id/trainingExec" />
+    </fragment>
+    <fragment
+        android:id="@+id/trainingExec"
+        android:name="com.clebi.trainer.ui.work.TrainingExecFragment"
+        android:label="TrainingExec" >
+        <argument
+            android:name="training_position"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
 
 </navigation>

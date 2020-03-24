@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebi.trainer.R
@@ -48,6 +49,10 @@ class TrainingFragment : Fragment() {
             view.training_title.text = training.name
             trainingStepsListAdapter.setTrainingSteps(training.steps)
         })
+        view.training_launch.setOnClickListener {
+            val action = TrainingFragmentDirections.actionTrainingFragmentToTrainingExec(position)
+            findNavController().navigate(action)
+        }
         view.training_step_add.setOnClickListener {
             val dialogBuilder = AlertDialog.Builder(context)
             val dialogView = inflater.inflate(R.layout.dialog_training_step, view as ViewGroup, false)

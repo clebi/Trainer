@@ -19,6 +19,16 @@
     <string name="training_name_input_title">Training name: </string>
     <string name="training_name_input">Name your training</string>
     <string name="training_step_power">Power: </string>
+    <string name="training_launch">Launch</string>
+
+    <!--Training exec fragment-->
+    <string name="training_exec_play">Play</string>
+    <string name="training_exec_pause">Pause</string>
+    <string name="training_exec_stop">Stop</string>
+    <string name="training_step_pos">Step %d/%d</string>
+    <string name="training_status_play">Go go go !</string>
+    <string name="training_status_paused">Paused...</string>
+    <string name="training_status_end">Well done.</string>
 
     <!--Settings fragment-->
     <string name="menu_settings">Settings</string>
