@@ -1,6 +1,5 @@
 package com.clebi.trainer.ui.trainings
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,9 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebi.trainer.R
 import com.clebi.trainer.trainings.Format
-import com.clebi.trainer.trainings.Training
 import com.clebi.trainer.trainings.TrainingStep
-import kotlinx.android.synthetic.main.dialog_training_step.view.*
 import kotlinx.android.synthetic.main.fragment_training.view.*
 
 /**
@@ -41,7 +38,18 @@ class TrainingFragment : Fragment() {
         val position = args.trainingPosition
         Log.d(TAG, "training position to get: $position")
         val view = inflater.inflate(R.layout.fragment_training, container, false)
-        val trainingStepsListAdapter = TrainingStepsListAdapter(listOf())
+        val trainingStepsListAdapter = TrainingStepsListAdapter(listOf()) { stepPosition ->
+            val training = trainingsModel.trainings.value!![position]
+            val dialog =
+                TrainingStepDialog(context!!, view as ViewGroup, training.steps[stepPosition]) { duration, power ->
+                    val steps = training.steps.toMutableList()
+                    steps[stepPosition] = TrainingStep(Format.durationFromString(duration), power.toShort())
+                    val newTraining = training.copy(steps = steps)
+                    trainingsModel.replaceTraining(position, newTraining)
+                }
+            dialog.create()
+            dialog.show()
+        }
         val stepsLayoutManager = LinearLayoutManager(context)
         view.training_steps.apply {
             adapter = trainingStepsListAdapter
@@ -51,10 +59,12 @@ class TrainingFragment : Fragment() {
             if (from == to) {
                 return@TouchHelper false
             }
+            Log.d(TAG, "dragFrom: $from - dragTo: $to")
             try {
                 trainingsModel.moveStep(position, from, to)
                 true
             } catch (exc: IllegalArgumentException) {
+                Log.w(TAG, exc)
                 false
             }
         })
@@ -76,24 +86,16 @@ class TrainingFragment : Fragment() {
             findNavController().navigate(action)
         }
         view.training_step_add.setOnClickListener {
-            val dialogBuilder = AlertDialog.Builder(context)
-            val dialogView = inflater.inflate(R.layout.dialog_training_step, view as ViewGroup, false)
-            dialogBuilder.setView(dialogView)
-            dialogBuilder.setNegativeButton(android.R.string.no) { dialog, _ ->
-                dialog.cancel()
-            }
-            dialogBuilder.setPositiveButton(android.R.string.ok) { dialog, _ ->
-                Log.d(TAG, "new step: ${dialogView.training_duration.text} - ${dialogView.training_power.text}")
-                dialog.dismiss()
-                val training = trainingsModel.trainings.value!![position]
-                val duration = Format.durationFromString(dialogView.training_duration.text.toString())
-                val power = dialogView.training_power.text.toString().toShort()
-                val steps = training.steps.toMutableList()
-                steps.add(TrainingStep(duration, power))
-                val newTraining = Training(training.name, steps)
-                trainingsModel.replaceTraining(position, newTraining)
-            }
-            dialogBuilder.show()
+            val training = trainingsModel.trainings.value!![position]
+            val dialog =
+                TrainingStepDialog(context!!, view as ViewGroup, null) { duration, power ->
+                    val steps = training.steps.toMutableList()
+                    steps.add(TrainingStep(Format.durationFromString(duration), power.toShort()))
+                    val newTraining = training.copy(steps = steps)
+                    trainingsModel.replaceTraining(position, newTraining)
+                }
+            dialog.create()
+            dialog.show()
         }
         return view
     }

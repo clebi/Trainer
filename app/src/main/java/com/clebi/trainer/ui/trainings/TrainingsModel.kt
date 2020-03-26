@@ -115,10 +115,11 @@ class TrainingsModel(private val trainingsStorages: Array<TrainingsStorage>) : V
             throw IllegalArgumentException("to is outside of the training step list")
         }
         val newSteps = training.steps.toMutableList()
-        newSteps.add(to, training.steps[from])
         if (from > to) {
+            newSteps.add(to, training.steps[from])
             newSteps.removeAt(from + 1)
         } else {
+            newSteps.add(to + 1, training.steps[from])
             newSteps.removeAt(from)
         }
         val newTraining = training.copy(steps = newSteps)

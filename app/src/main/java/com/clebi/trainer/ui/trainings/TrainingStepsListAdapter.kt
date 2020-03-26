@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.training_step_item.view.*
 /**
  * TrainingStepsListAdapter is responsible for display of a step in a list.
  */
-class TrainingStepsListAdapter(steps: List<TrainingStep>) :
+class TrainingStepsListAdapter(steps: List<TrainingStep>, private val editListener: (position: Int) -> Unit) :
     RecyclerView.Adapter<TrainingStepsListAdapter.TrainingStepViewHolder>() {
 
     companion object {
@@ -74,9 +74,11 @@ class TrainingStepsListAdapter(steps: List<TrainingStep>) :
         override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
             super.clearView(recyclerView, viewHolder)
             Log.d(TAG, "final drag from: $dragFrom - to: $dragTo")
-            if (dragFrom != -1 && dragTo != -1 && dragFrom != dragTo) {
+            if (dragFrom > -1 && dragTo > -1 && dragFrom != dragTo) {
                 callback(dragFrom, dragTo)
             }
+            dragFrom = -1
+            dragTo = -1
         }
     }
 
@@ -94,7 +96,11 @@ class TrainingStepsListAdapter(steps: List<TrainingStep>) :
         holder.itemView.step_id.text =
             holder.itemView.resources.getText(R.string.training_step_num).toString().format(position + 1)
         holder.itemView.step_duration.text = Format.formatDuration(step.duration)
-        holder.itemView.step_power.text = "${step.power}W"
+        holder.itemView.step_power.text = holder.itemView.resources.getString(R.string.training_power_value)
+            .format(step.power)
+        holder.itemView.training_edit.setOnClickListener {
+            editListener(position)
+        }
     }
 
     /**
