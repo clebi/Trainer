@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebi.trainer.R
 import com.clebi.trainer.devices.wahoo.WahooTrainerService
@@ -47,10 +48,17 @@ class TrainingsFragment : Fragment() {
         trainingsModel.trainings.observe(viewLifecycleOwner, Observer {
             trainingListAdapter.setTrainings(it)
         })
+        val trainingsLayoutManager = LinearLayoutManager(context)
         view.trainings_list.apply {
             adapter = trainingListAdapter
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = trainingsLayoutManager
         }
+        view.trainings_list.addItemDecoration(
+            DividerItemDecoration(
+                view.trainings_list.context,
+                trainingsLayoutManager.orientation
+            )
+        )
         view.training_new.setOnClickListener {
             val builder = AlertDialog.Builder(context)
             builder.setTitle(resources.getString(R.string.training_new_dialog_title))
