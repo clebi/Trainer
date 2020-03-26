@@ -42,7 +42,7 @@ class TrainingsModel(private val trainingsStorages: Array<TrainingsStorage>) : V
      * Save trainings to storage.
      */
     fun saveToStorage() {
-        val epoch = System.currentTimeMillis() / 1000;
+        val epoch = System.currentTimeMillis() / 1000
         val trainings = (_trainings.value ?: listOf())
         trainingsStorages.forEach {
             if (it.isAccessible()) {
@@ -95,5 +95,33 @@ class TrainingsModel(private val trainingsStorages: Array<TrainingsStorage>) : V
         _trainings.apply {
             value = trainings
         }
+    }
+
+    /**
+     * Swap to trainings in the list.
+     * @param position position of the training.
+     * @param from original step position.
+     * @param to destination step position.
+     */
+    fun moveStep(position: Int, from: Int, to: Int) {
+        if (position >= _trainings.value!!.count()) {
+            throw IllegalArgumentException("position is outside of the trainings list")
+        }
+        val training = _trainings.value!![position]
+        if (from < 0 || from >= training.steps.count()) {
+            throw IllegalArgumentException("from is outside of the training step list")
+        }
+        if (to < 0 || to >= training.steps.count()) {
+            throw IllegalArgumentException("to is outside of the training step list")
+        }
+        val newSteps = training.steps.toMutableList()
+        newSteps.add(to, training.steps[from])
+        if (from > to) {
+            newSteps.removeAt(from + 1)
+        } else {
+            newSteps.removeAt(from)
+        }
+        val newTraining = training.copy(steps = newSteps)
+        replaceTraining(position, newTraining)
     }
 }

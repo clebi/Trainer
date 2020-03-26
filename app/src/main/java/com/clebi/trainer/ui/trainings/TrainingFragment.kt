@@ -11,6 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebi.trainer.R
 import com.clebi.trainer.trainings.Format
@@ -40,10 +42,29 @@ class TrainingFragment : Fragment() {
         Log.d(TAG, "training position to get: $position")
         val view = inflater.inflate(R.layout.fragment_training, container, false)
         val trainingStepsListAdapter = TrainingStepsListAdapter(listOf())
+        val stepsLayoutManager = LinearLayoutManager(context)
         view.training_steps.apply {
             adapter = trainingStepsListAdapter
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = stepsLayoutManager
         }
+        val touchHelper = ItemTouchHelper(trainingStepsListAdapter.TouchHelper { from: Int, to: Int ->
+            if (from == to) {
+                return@TouchHelper false
+            }
+            try {
+                trainingsModel.moveStep(position, from, to)
+                true
+            } catch (exc: IllegalArgumentException) {
+                false
+            }
+        })
+        touchHelper.attachToRecyclerView(view.training_steps)
+        view.training_steps.addItemDecoration(
+            DividerItemDecoration(
+                view.training_steps.context,
+                stepsLayoutManager.orientation
+            )
+        )
         trainingsModel.trainings.observe(viewLifecycleOwner, Observer { trainings ->
             val training = trainings[position]
             Log.d(TAG, "training: $training")
