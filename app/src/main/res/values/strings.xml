@@ -20,6 +20,7 @@
     <string name="training_name_input">Name your training</string>
     <string name="training_step_power">Power: </string>
     <string name="training_launch">Launch</string>
+    <string name="training_delete">Delete training</string>
 
     <!--Training exec fragment-->
     <string name="training_exec_play">Play</string>

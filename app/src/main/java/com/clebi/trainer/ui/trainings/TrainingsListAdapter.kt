@@ -6,15 +6,21 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.clebi.trainer.R
+import com.clebi.trainer.trainings.Format
 import com.clebi.trainer.trainings.Training
 import kotlinx.android.synthetic.main.training_item.view.*
 
 typealias OnClickListener = (position: Int) -> Unit
+typealias OnDeleteListener = (position: Int) -> Unit
 
 /**
  * TrainingsListAdapter is the adapter for trainings list.
  */
-class TrainingsListAdapter(private var trainingsList: List<Training>, private val onClickListener: OnClickListener) :
+class TrainingsListAdapter(
+    private var trainingsList: List<Training>,
+    private val onClickListener: OnClickListener,
+    private val onDeleteListener: OnDeleteListener
+) :
     RecyclerView.Adapter<TrainingsListAdapter.TrainingViewHolder>() {
 
     companion object {
@@ -45,10 +51,10 @@ class TrainingsListAdapter(private var trainingsList: List<Training>, private va
         val duration: Int = training.steps.stream().mapToInt {
             it.duration
         }.sum()
-        val hours = duration / 3600
-        val minutes = (duration - hours * 3600) / 60
-        val seconds = (duration - hours * 3600 - minutes * 60) % 60
-        holder.itemView.duration.text = "%02d:%02d:%02d".format(hours, minutes, seconds)
+        holder.itemView.duration.text = Format.formatDuration(duration)
+        holder.itemView.training_delete_btn.setOnClickListener {
+            onDeleteListener(position)
+        }
         holder.bind(position, onClickListener)
     }
 

@@ -62,4 +62,19 @@ class TrainingsModel(private val trainingsStorage: TrainingsStorage) : ViewModel
             value = trainings
         }
     }
+
+    /**
+     * Remove a training from the list of trainings.
+     *  @param position position of the training to remove.
+     */
+    fun removeTraining(position: Int) {
+        val trainings = (_trainings.value ?: listOf()).toMutableList()
+        if (position >= trainings.count()) {
+            throw IllegalArgumentException("position is outside of the trainings list")
+        }
+        trainings.removeAt(position)
+        _trainings.apply {
+            value = trainings
+        }
+    }
 }
