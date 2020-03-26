@@ -3,11 +3,12 @@ package com.clebi.trainer.devices.wahoo
 import android.util.Log
 import com.clebi.trainer.devices.ConnectedDevice
 import com.clebi.trainer.devices.ConnectedDeviceListener
+import com.clebi.trainer.devices.Device
 import com.clebi.trainer.devices.DeviceCapability
 import com.clebi.trainer.devices.DeviceConnectionStatus
-import com.clebi.trainer.devices.Device
 import com.wahoofitness.connector.HardwareConnectorEnums
 import com.wahoofitness.connector.capabilities.Capability
+import com.wahoofitness.connector.capabilities.Kickr
 import com.wahoofitness.connector.conn.connections.SensorConnection
 import kotlin.properties.Delegates
 
@@ -19,10 +20,11 @@ class WahooConnectedDevice(override val device: Device) : ConnectedDevice, Senso
         private const val TAG = "WahooConnectedDevice"
     }
 
-    /**
-     * List of all listeners registered.
-     */
+    /** List of all listeners registered */
     private val listeners = mutableListOf<ConnectedDeviceListener>()
+
+    /** Connection to the sensor */
+    private var sensorConnection: SensorConnection? = null
 
     /** status if the device */
     override var status: DeviceConnectionStatus
@@ -72,6 +74,11 @@ class WahooConnectedDevice(override val device: Device) : ConnectedDevice, Senso
             HardwareConnectorEnums.SensorConnectionState.CONNECTED -> DeviceConnectionStatus.CONNECTED
             HardwareConnectorEnums.SensorConnectionState.DISCONNECTING -> DeviceConnectionStatus.DISCONNECTING
         }
+        if (status == DeviceConnectionStatus.CONNECTED) {
+            sensorConnection = connection
+        } else {
+            sensorConnection = null
+        }
     }
 
     /**
@@ -93,7 +100,7 @@ class WahooConnectedDevice(override val device: Device) : ConnectedDevice, Senso
     override fun onNewCapabilityDetected(connection: SensorConnection, capability: Capability.CapabilityType) {
         Log.d(TAG, "onNewCapabilityDetected: $connection - $capability")
         val deviceCapability = when (capability) {
-            Capability.CapabilityType.BikeTrainer -> DeviceCapability.BIKE_TRAINER
+            Capability.CapabilityType.Kickr -> DeviceCapability.BIKE_TRAINER
             Capability.CapabilityType.BikePower -> DeviceCapability.BIKE_POWER
             else -> null
         }
@@ -102,5 +109,33 @@ class WahooConnectedDevice(override val device: Device) : ConnectedDevice, Senso
         newCapabilities.add(deviceCapability)
         Log.d(TAG, "onNewCapabilityDetected: new capabilities: $newCapabilities")
         capabilities = newCapabilities
+    }
+
+    /**
+     * Get a capability.
+     * @param capability the capability to get.
+     * @return the corresponding capability.
+     */
+    private fun getCapability(capability: DeviceCapability): Capability {
+        if (sensorConnection == null) {
+            throw IllegalStateException("device is not connected")
+        }
+        if (!capabilities.contains(capability)) {
+            throw IllegalStateException("capability: $capability does not exists for this device")
+        }
+        val capa = when (capability) {
+            DeviceCapability.BIKE_TRAINER -> Capability.CapabilityType.BikeTrainer
+            DeviceCapability.BIKE_POWER -> Capability.CapabilityType.BikePower
+        }
+        return sensorConnection!!.getCurrentCapability(capa)!!
+    }
+
+    /**
+     * Get the bike trainer capability.
+     * @return the bike trainer.
+     */
+    override fun getBikeTrainer(): com.clebi.trainer.devices.BikeTrainer {
+        val trainer = getCapability(DeviceCapability.BIKE_TRAINER) as Kickr
+        return WahooBikeTrainer(trainer)
     }
 }

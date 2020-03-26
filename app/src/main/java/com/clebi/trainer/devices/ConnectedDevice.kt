@@ -29,4 +29,5 @@ interface ConnectedDevice {
 
     fun addListener(listener: ConnectedDeviceListener)
     fun removeListener(listener: ConnectedDeviceListener)
+    fun getBikeTrainer(): BikeTrainer
 }

@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.clebi.trainer.R
-import com.clebi.trainer.devices.wahoo.WahooTrainerService
 import com.clebi.trainer.devices.Device
+import com.clebi.trainer.devices.wahoo.WahooTrainerService
 
 /**
  * TrainerSearchFragment manages the search of training devices.

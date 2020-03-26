@@ -54,12 +54,12 @@ class TrainingsFragment : Fragment() {
         view.training_new.setOnClickListener {
             val builder = AlertDialog.Builder(context)
             builder.setTitle(resources.getString(R.string.training_new_dialog_title))
-            val view = inflater.inflate(R.layout.dialog_training_name, view as ViewGroup, false)
-            builder.setView(view)
+            val dialogView = inflater.inflate(R.layout.dialog_training_name, view as ViewGroup, false)
+            builder.setView(dialogView)
             builder.setPositiveButton(android.R.string.ok) { dialog, _ ->
-                Log.d(TAG, "new training name: ${view.training_name.text}")
+                Log.d(TAG, "new training name: ${dialogView.training_name.text}")
                 dialog.dismiss()
-                val position = trainingsModel.addTraining(Training(view.training_name.text.toString(), listOf()))
+                val position = trainingsModel.addTraining(Training(dialogView.training_name.text.toString(), listOf()))
                 Log.d(TAG, "new training at position: $position")
                 val action = TrainingsFragmentDirections.actionNavHomeToTrainingFragment(position)
                 findNavController().navigate(action)

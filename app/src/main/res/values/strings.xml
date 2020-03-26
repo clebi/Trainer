@@ -29,6 +29,7 @@
     <string name="training_status_play">Go go go !</string>
     <string name="training_status_paused">Paused...</string>
     <string name="training_status_end">Well done.</string>
+    <string name="training_device_not_connected">Unable to find trainer, check your configuration !</string>
 
     <!--Settings fragment-->
     <string name="menu_settings">Settings</string>

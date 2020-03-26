@@ -32,7 +32,8 @@ class TrainingFragment : Fragment() {
     private val trainingsModel: TrainingsModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val position = args.trainingPosition

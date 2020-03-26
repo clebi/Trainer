@@ -1,6 +1,7 @@
 package com.clebi.trainer.ui.config
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.clebi.trainer.devices.BikeTrainer
 import com.clebi.trainer.devices.ConnectedDevice
 import com.clebi.trainer.devices.ConnectedDeviceListener
 import com.clebi.trainer.devices.Device
@@ -22,6 +23,10 @@ data class TestConnectedDevice(
     }
 
     override fun removeListener(listener: ConnectedDeviceListener) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getBikeTrainer(): BikeTrainer {
         TODO("Not yet implemented")
     }
 }
