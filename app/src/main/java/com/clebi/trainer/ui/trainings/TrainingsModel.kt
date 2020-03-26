@@ -1,5 +1,6 @@
 package com.clebi.trainer.ui.trainings
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +10,11 @@ import com.clebi.trainer.trainings.TrainingsStorage
 /**
  * TrainingsModel contains fields for trainings views.
  */
-class TrainingsModel(private val trainingsStorage: TrainingsStorage) : ViewModel() {
+class TrainingsModel(private val trainingsStorages: Array<TrainingsStorage>) : ViewModel() {
+
+    companion object {
+        private const val TAG = "TrainingsModel"
+    }
 
     private val _trainings: MutableLiveData<List<Training>> = MutableLiveData(listOf())
     val trainings: LiveData<List<Training>> = _trainings
@@ -18,9 +23,18 @@ class TrainingsModel(private val trainingsStorage: TrainingsStorage) : ViewModel
      * Replace the list of trainings.
      */
     fun readFromStorage() {
-        val trainings = trainingsStorage.read()
+        val trainingsContainer = trainingsStorages.mapNotNull { item ->
+            if (item.isAccessible()) {
+                item.read()
+            } else {
+                null
+            }
+        }.sortedBy {
+            it.saveTime
+        }
+        Log.d(TAG, "trainings container: $trainingsContainer")
         _trainings.apply {
-            value = trainings
+            value = trainingsContainer[0].trainings
         }
     }
 
@@ -28,8 +42,13 @@ class TrainingsModel(private val trainingsStorage: TrainingsStorage) : ViewModel
      * Save trainings to storage.
      */
     fun saveToStorage() {
+        val epoch = System.currentTimeMillis() / 1000;
         val trainings = (_trainings.value ?: listOf())
-        trainingsStorage.write(trainings)
+        trainingsStorages.forEach {
+            if (it.isAccessible()) {
+                it.write(epoch, trainings)
+            }
+        }
     }
 
     /**

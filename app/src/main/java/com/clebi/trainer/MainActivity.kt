@@ -12,6 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.clebi.trainer.trainings.FileTrainingStorage
 import com.clebi.trainer.trainings.SharedPrefsTrainingStorage
 import com.clebi.trainer.trainings.TrainingsStorage
 import com.clebi.trainer.ui.trainings.TrainingsModel
@@ -20,10 +21,10 @@ import com.google.android.material.navigation.NavigationView
 /**
  * TrainingsModelFactory builds trainings model with constructor params.
  */
-class TrainingsModelFactory(private val trainingsStorage: TrainingsStorage) : ViewModelProvider.Factory {
+class TrainingsModelFactory(private val trainingsStorages: Array<TrainingsStorage>) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return TrainingsModel(trainingsStorage) as T
+        return TrainingsModel(trainingsStorages) as T
     }
 }
 
@@ -38,7 +39,14 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // Initialize the trainings model
-        ViewModelProvider(this, TrainingsModelFactory(SharedPrefsTrainingStorage(applicationContext))).get(
+        ViewModelProvider(
+            this, TrainingsModelFactory(
+                arrayOf(
+                    FileTrainingStorage(applicationContext),
+                    SharedPrefsTrainingStorage(applicationContext)
+                )
+            )
+        ).get(
             TrainingsModel::class.java
         )
 

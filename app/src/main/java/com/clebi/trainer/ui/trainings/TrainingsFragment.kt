@@ -43,9 +43,7 @@ class TrainingsFragment : Fragment() {
             Log.d(TAG, "click on training: $position")
             val action = TrainingsFragmentDirections.actionNavHomeToTrainingFragment(position)
             findNavController().navigate(action)
-        }, { position ->
-            trainingsModel.removeTraining(position)
-        })
+        }, { position -> trainingsModel.removeTraining(position) })
         trainingsModel.trainings.observe(viewLifecycleOwner, Observer {
             trainingListAdapter.setTrainings(it)
         })
