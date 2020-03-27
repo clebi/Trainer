@@ -60,6 +60,12 @@ class TrainerConfigFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         configService = WahooTrainerService.instance
+        val devices = devicesConfigModel.readConnectedDevicesFromStorage()
+        devices.forEach {
+            val connectedDevice = configService.connectToDevice(it)
+            devicesConfigModel.addConnectedDevices(connectedDevice)
+        }
+
     }
 
     override fun onCreateView(
@@ -89,5 +95,6 @@ class TrainerConfigFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         configService.unlistenNetworkChange(networkChangeListener)
+        devicesConfigModel.saveConnectedDevicesToStorage()
     }
 }

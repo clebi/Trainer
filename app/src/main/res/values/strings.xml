@@ -48,4 +48,5 @@
     <!--Search fragment-->
     <string name="menu_search">Search</string>
     <string name="trainer_search_add">Add device</string>
+    <string name="training_device_already_exists">Device already known !</string>
 </resources>

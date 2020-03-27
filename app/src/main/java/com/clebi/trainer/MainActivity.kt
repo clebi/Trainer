@@ -12,9 +12,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.clebi.trainer.devices.ConnectedDevicesStorage
+import com.clebi.trainer.devices.SharedPrefsConnectedDevicesStorage
 import com.clebi.trainer.trainings.FileTrainingStorage
 import com.clebi.trainer.trainings.SharedPrefsTrainingStorage
 import com.clebi.trainer.trainings.TrainingsStorage
+import com.clebi.trainer.ui.config.DevicesConfigModel
 import com.clebi.trainer.ui.trainings.TrainingsModel
 import com.google.android.material.navigation.NavigationView
 
@@ -25,6 +28,16 @@ class TrainingsModelFactory(private val trainingsStorages: Array<TrainingsStorag
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return TrainingsModel(trainingsStorages) as T
+    }
+}
+
+/**
+ * DevicesConfigModelFactory builds trainings model with constructor params.
+ */
+class DevicesModelFactory(private val devicesStorages: Array<ConnectedDevicesStorage>) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return DevicesConfigModel(devicesStorages) as T
     }
 }
 
@@ -48,6 +61,17 @@ class MainActivity : AppCompatActivity() {
             )
         ).get(
             TrainingsModel::class.java
+        )
+
+        // Initialize the devices config model
+        ViewModelProvider(
+            this, DevicesModelFactory(
+                arrayOf(
+                    SharedPrefsConnectedDevicesStorage(applicationContext)
+                )
+            )
+        ).get(
+            DevicesConfigModel::class.java
         )
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)

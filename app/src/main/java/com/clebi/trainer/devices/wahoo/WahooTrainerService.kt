@@ -114,7 +114,7 @@ class WahooTrainerService : Service() {
             val type = sensorTypesToDeviceTypes[params.sensorType] ?: return
             discoveredListeners.forEach {
                 it(
-                    Device(
+                    WahooDevice(
                         params.id,
                         params.antId,
                         type,
@@ -143,7 +143,7 @@ class WahooTrainerService : Service() {
     }
 
     fun searchForDevices() {
-        Log.d(TAG, "srart discovery")
+        Log.d(TAG, "start discovery")
         hardwareConnector.startDiscovery(searchListener, HardwareConnectorTypes.NetworkType.BTLE)
     }
 

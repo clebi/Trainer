@@ -2,9 +2,11 @@ package com.clebi.trainer.ui.config
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -47,6 +49,19 @@ class TrainerSearchFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_trainer_search, container, false)
         val trainerSearchListAdapter = DeviceListAdapter(devicesConfigModel.searchDevices.value!!) { device ->
             Log.d(TAG, "device add: ${device.name} - ${device.id}")
+            if (devicesConfigModel.connectedDevices.value!!.filter {
+                    it.device.id == device.id
+                }.count() > 0) {
+                Log.d(TAG, "device already exists: ${device.name} - ${device.id}")
+                val toast = Toast.makeText(
+                    context,
+                    resources.getString(R.string.training_device_already_exists),
+                    Toast.LENGTH_LONG
+                )
+                toast.setGravity(Gravity.TOP, 0, 25)
+                toast.show()
+                return@DeviceListAdapter
+            }
             val connectedDevice = configService.connectToDevice(device)
             devicesConfigModel.addConnectedDevices(connectedDevice)
             findNavController().popBackStack()
