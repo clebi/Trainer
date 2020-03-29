@@ -29,14 +29,17 @@ class TrainingStepsListAdapter(steps: List<TrainingStep>, private val editListen
     /**
      * TouchHelper manages drag and drop for steps.
      */
-    inner class TouchHelper(private val callback: (from: Int, to: Int) -> Boolean) :
+    inner class TouchHelper(
+        private val dragCallback: (from: Int, to: Int) -> Unit,
+        private val swipeCallback: (position: Int) -> Unit
+    ) :
         ItemTouchHelper.Callback() {
 
         private var dragFrom = -1
         private var dragTo = -1
 
         override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-            return makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0)
+            return makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT)
         }
 
         override fun onMove(
@@ -65,6 +68,8 @@ class TrainingStepsListAdapter(steps: List<TrainingStep>, private val editListen
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            Log.d(TAG, "swipe right: ${viewHolder.adapterPosition}")
+            swipeCallback(viewHolder.adapterPosition)
         }
 
         /**
@@ -75,7 +80,7 @@ class TrainingStepsListAdapter(steps: List<TrainingStep>, private val editListen
             super.clearView(recyclerView, viewHolder)
             Log.d(TAG, "final drag from: $dragFrom - to: $dragTo")
             if (dragFrom > -1 && dragTo > -1 && dragFrom != dragTo) {
-                callback(dragFrom, dragTo)
+                dragCallback(dragFrom, dragTo)
             }
             dragFrom = -1
             dragTo = -1

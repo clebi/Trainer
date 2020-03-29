@@ -125,4 +125,22 @@ class TrainingsModel(private val trainingsStorages: Array<TrainingsStorage>) : V
         val newTraining = training.copy(steps = newSteps)
         replaceTraining(position, newTraining)
     }
+
+    /**
+     * Delete a step from a training.
+     * @param position position of the training.
+     * @param stepPosition position of the step to remove.
+     */
+    fun deleteStep(position: Int, stepPosition: Int) {
+        if (position >= _trainings.value!!.count()) {
+            throw IllegalArgumentException("position is outside of the trainings list")
+        }
+        val training = _trainings.value!![position]
+        if (stepPosition < 0 || stepPosition >= training.steps.count()) {
+            throw IllegalArgumentException("from is outside of the training step list")
+        }
+        val newSteps = training.steps.toMutableList()
+        newSteps.removeAt(stepPosition)
+        replaceTraining(position, training.copy(steps = newSteps))
+    }
 }

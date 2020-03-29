@@ -55,19 +55,19 @@ class TrainingFragment : Fragment() {
             adapter = trainingStepsListAdapter
             layoutManager = stepsLayoutManager
         }
-        val touchHelper = ItemTouchHelper(trainingStepsListAdapter.TouchHelper { from: Int, to: Int ->
+        val touchHelper = ItemTouchHelper(trainingStepsListAdapter.TouchHelper({ from: Int, to: Int ->
             if (from == to) {
-                return@TouchHelper false
+                return@TouchHelper
             }
             Log.d(TAG, "dragFrom: $from - dragTo: $to")
             try {
                 trainingsModel.moveStep(position, from, to)
-                true
             } catch (exc: IllegalArgumentException) {
                 Log.w(TAG, exc)
-                false
             }
-        })
+        }, { stepPosition ->
+            trainingsModel.deleteStep(position, stepPosition)
+        }))
         touchHelper.attachToRecyclerView(view.training_steps)
         view.training_steps.addItemDecoration(
             DividerItemDecoration(
