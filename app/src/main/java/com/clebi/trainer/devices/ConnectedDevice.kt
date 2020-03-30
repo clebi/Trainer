@@ -1,7 +1,5 @@
 package com.clebi.trainer.devices
 
-import java.io.Serializable
-
 /**
  * Callback for status change.
  */

@@ -65,7 +65,6 @@ class TrainerConfigFragment : Fragment() {
             val connectedDevice = configService.connectToDevice(it)
             devicesConfigModel.addConnectedDevices(connectedDevice)
         }
-
     }
 
     override fun onCreateView(
