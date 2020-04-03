@@ -3,7 +3,7 @@ node {
         checkout scm
     }
     stage('build') {
-        sh './gradlew build'
+        sh './gradlew assemble'
     }
     stage('lint') {
         sh './gradlew lint'
