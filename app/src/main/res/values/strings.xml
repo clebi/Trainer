@@ -10,6 +10,7 @@
     <string name="trainings_list_title">Trainings</string>
     <string name="trainings_new">Create training</string>
     <string name="training_delete">Delete training</string>
+    <string name="training_name_error">name must contain at list 3 characters</string>
 
     <!--Training fragment-->
     <string name="menu_training">Training</string>

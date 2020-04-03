@@ -3,10 +3,12 @@ package com.clebi.trainer.ui.trainings
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -75,6 +77,7 @@ class TrainingsFragment : Fragment() {
             val dialogView = inflater.inflate(R.layout.dialog_training_name, view as ViewGroup, false)
             builder.setView(dialogView)
             builder.setPositiveButton(android.R.string.ok) { dialog, _ ->
+                val okBtn = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
                 Log.d(TAG, "new training name: ${dialogView.training_name.text}")
                 dialog.dismiss()
                 val position = trainingsModel.addTraining(Training(dialogView.training_name.text.toString(), listOf()))
@@ -85,7 +88,20 @@ class TrainingsFragment : Fragment() {
             builder.setNegativeButton(android.R.string.cancel) { dialog, _ ->
                 dialog.cancel()
             }
-            builder.show()
+            val dialog = builder.create() as AlertDialog
+            dialog.show()
+            // The positive button is disabled till training name is correct
+            val okBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            okBtn.isEnabled = false
+            dialogView.training_name.addTextChangedListener { text: Editable? ->
+                if (text.isNullOrEmpty() || text.isBlank() || text.length < 3) {
+                    okBtn.isEnabled = false
+                    dialogView.training_name.error = resources.getString(R.string.training_name_error)
+                } else {
+                    okBtn.isEnabled = true
+                    dialogView.training_name.error = null
+                }
+            }
         }
         return view
     }
