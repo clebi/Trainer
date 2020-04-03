@@ -26,16 +26,26 @@ class TrainingsFragment : Fragment() {
 
     companion object {
         private const val TAG = "TrainingsFragment"
+        private const val modelInitializedKey = "trainings_model_init"
     }
 
     private val trainingsModel: TrainingsModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        trainingsModel.readFromStorage()
+        Log.d(TAG, "onCreate: $savedInstanceState")
+        val initialize = savedInstanceState?.getBoolean(modelInitializedKey)
+        if (initialize == null || !initialize) {
+            trainingsModel.readFromStorage()
+        }
         Intent(context, WahooTrainerService::class.java).also {
             activity?.startService(it)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(modelInitializedKey, true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
