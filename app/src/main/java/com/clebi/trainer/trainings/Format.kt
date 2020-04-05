@@ -1,5 +1,7 @@
 package com.clebi.trainer.trainings
 
+import androidx.core.text.isDigitsOnly
+
 /**
  * Provides utils function for formatting.
  */
@@ -53,8 +55,20 @@ object Format {
         if (parts.count() < 2) {
             throw IllegalArgumentException("duration must have 2 components")
         }
+        if (!parts[0].isDigitsOnly()) {
+            throw IllegalArgumentException("wrong format for minutes")
+        }
+        if (parts[1].length > 2 || !parts[1].isDigitsOnly()) {
+            throw IllegalArgumentException("wrong format for seconds")
+        }
         val minutes = parts[0].toInt()
+        if (minutes < 0) {
+            throw IllegalArgumentException("minutes value is mess than 0")
+        }
         val seconds = parts[1].toInt()
+        if (seconds < 0 || seconds > 60) {
+            throw IllegalArgumentException("seconds value is less than 0 or greater than 60")
+        }
         return minutes * 60 + seconds
     }
 }

@@ -24,6 +24,8 @@
     <string name="training_launch">Launch</string>
     <string name="training_edit">Edit training</string>
     <string name="training_power_value">%dW</string>
+    <string name="training_duration_error">Duration must be set with format mins:secs</string>
+    <string name="training_power_error">Power must must a number</string>
 
     <!--Training exec fragment-->
     <string name="training_exec_play">Play</string>
