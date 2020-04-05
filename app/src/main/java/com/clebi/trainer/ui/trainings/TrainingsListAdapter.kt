@@ -51,7 +51,7 @@ class TrainingsListAdapter(
         val duration: Int = training.steps.stream().mapToInt {
             it.duration
         }.sum()
-        holder.itemView.duration.text = Format.formatDuration(duration)
+        holder.itemView.duration.text = Format.formatShortDuration(duration)
         holder.itemView.training_delete_btn.setOnClickListener {
             onDeleteListener(position)
         }

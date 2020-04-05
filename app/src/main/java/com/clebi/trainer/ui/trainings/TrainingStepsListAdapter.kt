@@ -100,7 +100,7 @@ class TrainingStepsListAdapter(steps: List<TrainingStep>, private val editListen
         val step = steps[position]
         holder.itemView.step_id.text =
             holder.itemView.resources.getText(R.string.training_step_num).toString().format(position + 1)
-        holder.itemView.step_duration.text = Format.formatDuration(step.duration)
+        holder.itemView.step_duration.text = Format.formatShortDuration(step.duration)
         holder.itemView.step_power.text = holder.itemView.resources.getString(R.string.training_power_value)
             .format(step.power)
         holder.itemView.training_edit.setOnClickListener {

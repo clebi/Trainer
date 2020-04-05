@@ -54,10 +54,10 @@ class TrainingExecFragment : Fragment() {
                 controller.setPower(it)
             })
             viewModel.remainingTotalTime.observe(viewLifecycleOwner, Observer {
-                training_duration.text = Format.formatDuration(it)
+                training_duration.text = Format.formatShortDuration(it)
             })
             viewModel.remainingStepTime.observe(viewLifecycleOwner, Observer {
-                training_step_duration.text = Format.formatDuration(it)
+                training_step_duration.text = Format.formatShortDuration(it)
             })
             viewModel.currentStatus.observe(viewLifecycleOwner, Observer {
                 val text = when (it) {

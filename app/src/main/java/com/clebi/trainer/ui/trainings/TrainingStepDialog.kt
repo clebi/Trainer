@@ -1,6 +1,7 @@
 package com.clebi.trainer.ui.trainings
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ class TrainingStepDialog(
 ) {
     private val dialogBuilder = AlertDialog.Builder(context)
     private val inflater = LayoutInflater.from(context)
+    private lateinit var dialog: Dialog
 
     /**
      * Creates the dialog.
@@ -27,7 +29,7 @@ class TrainingStepDialog(
     fun create() {
         val view = inflater.inflate(R.layout.dialog_training_step, viewGroup, false)
         step?.let {
-            view.training_duration.setText(Format.formatDuration(it.duration))
+            view.training_duration.setText(Format.formatShortDuration(it.duration))
             view.training_power.setText("${it.power}")
         }
         dialogBuilder.setView(view)
@@ -38,12 +40,13 @@ class TrainingStepDialog(
             dialog.dismiss()
             callback(view.training_duration.text.toString(), view.training_power.text.toString())
         }
+        dialog = dialogBuilder.create()
     }
 
     /**
      * Shows the dialog.
      */
     fun show() {
-        dialogBuilder.show()
+        dialog.show()
     }
 }

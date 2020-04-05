@@ -31,4 +31,30 @@ object Format {
         val seconds = parts[2].toInt()
         return hours * 3600 + minutes * 60 + seconds
     }
+
+    /**
+     * Format a duration with short format.
+     * @param duration in seconds.
+     * @return formatted duration.
+     */
+    fun formatShortDuration(duration: Int): String {
+        val minutes = duration / 60
+        val seconds = (duration - minutes * 60) % 60
+        return "%02d:%02d".format(minutes, seconds)
+    }
+
+    /**
+     * Get duration from a short formatted string.
+     * @param duration the duration string
+     * @return duration in seconds
+     */
+    fun shortDurationFromString(duration: String): Int {
+        val parts = duration.split(':')
+        if (parts.count() < 2) {
+            throw IllegalArgumentException("duration must have 2 components")
+        }
+        val minutes = parts[0].toInt()
+        val seconds = parts[1].toInt()
+        return minutes * 60 + seconds
+    }
 }

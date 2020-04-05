@@ -43,7 +43,7 @@ class TrainingFragment : Fragment() {
             val dialog =
                 TrainingStepDialog(context!!, view as ViewGroup, training.steps[stepPosition]) { duration, power ->
                     val steps = training.steps.toMutableList()
-                    steps[stepPosition] = TrainingStep(Format.durationFromString(duration), power.toShort())
+                    steps[stepPosition] = TrainingStep(Format.shortDurationFromString(duration), power.toShort())
                     val newTraining = training.copy(steps = steps)
                     trainingsModel.replaceTraining(position, newTraining)
                 }
@@ -90,7 +90,7 @@ class TrainingFragment : Fragment() {
             val dialog =
                 TrainingStepDialog(context!!, view as ViewGroup, null) { duration, power ->
                     val steps = training.steps.toMutableList()
-                    steps.add(TrainingStep(Format.durationFromString(duration), power.toShort()))
+                    steps.add(TrainingStep(Format.shortDurationFromString(duration), power.toShort()))
                     val newTraining = training.copy(steps = steps)
                     trainingsModel.replaceTraining(position, newTraining)
                 }
