@@ -100,4 +100,12 @@ class TrainingExecViewModel(private val training: Training) : ViewModel() {
     fun trainingEnd() {
         _currentStatus.postValue(TrainingStatus.END)
     }
+
+    /**
+     * Change power.
+     * @param power new value for power.
+     */
+    fun changePower(power: Short) {
+        _currentPower.postValue(power)
+    }
 }

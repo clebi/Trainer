@@ -36,6 +36,8 @@
     <string name="training_status_paused">Paused...</string>
     <string name="training_status_end">Well done.</string>
     <string name="training_device_not_connected">Unable to find trainer, check your configuration !</string>
+    <string name="training_power_increase">Increase power</string>
+    <string name="training_power_reduce">Reduce power</string>
 
     <!--Settings fragment-->
     <string name="menu_settings">Settings</string>

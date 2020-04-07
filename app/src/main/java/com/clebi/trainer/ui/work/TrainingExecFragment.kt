@@ -51,7 +51,7 @@ class TrainingExecFragment : Fragment() {
             })
             viewModel.currentPower.observe(viewLifecycleOwner, Observer {
                 view.training_power.text = "${it}W"
-                controller.setPower(it)
+                controller.setTrainerPower(it)
             })
             viewModel.remainingTotalTime.observe(viewLifecycleOwner, Observer {
                 training_duration.text = Format.formatShortDuration(it)
@@ -77,6 +77,12 @@ class TrainingExecFragment : Fragment() {
             view.training_stop.setOnClickListener {
                 controller.stop()
                 findNavController().popBackStack()
+            }
+            view.training_power_reduce.setOnClickListener {
+                controller.reducePower()
+            }
+            view.training_power_increase.setOnClickListener {
+                controller.increasePower()
             }
         } catch (exc: IllegalStateException) {
             val toast = Toast.makeText(

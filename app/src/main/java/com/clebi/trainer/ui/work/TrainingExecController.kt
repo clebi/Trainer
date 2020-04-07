@@ -39,7 +39,7 @@ class TrainingExecController(
     /**
      * Set the training power target.
      */
-    fun setPower(power: Short) {
+    fun setTrainerPower(power: Short) {
         Log.d(TAG, "set power target: $power")
         trainer.setPowerTarget(power)
     }
@@ -87,5 +87,21 @@ class TrainingExecController(
     fun stop() {
         timer?.cancel()
         trainingExecViewModel.trainingStop()
+    }
+
+    /**
+     * Increase the current power.
+     * @param step by how much the power must be increased.
+     */
+    fun increasePower(step: Short = 5) {
+        trainingExecViewModel.changePower((trainingExecViewModel.currentPower.value!! + step).toShort())
+    }
+
+    /**
+     * Reduce the current power.
+     * @param step by how much the power must be reduced.
+     */
+    fun reducePower(step: Short = 5) {
+        trainingExecViewModel.changePower((trainingExecViewModel.currentPower.value!! - step).toShort())
     }
 }
