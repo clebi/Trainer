@@ -77,7 +77,6 @@ class TrainingsFragment : Fragment() {
             val dialogView = inflater.inflate(R.layout.dialog_training_name, view as ViewGroup, false)
             builder.setView(dialogView)
             builder.setPositiveButton(android.R.string.ok) { dialog, _ ->
-                val okBtn = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
                 Log.d(TAG, "new training name: ${dialogView.training_name.text}")
                 dialog.dismiss()
                 val position = trainingsModel.addTraining(Training(dialogView.training_name.text.toString(), listOf()))

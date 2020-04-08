@@ -9,6 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="0"
         android:orientation="horizontal">
 
         <TextView
@@ -32,7 +34,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/training_steps"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="2">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -40,6 +43,8 @@
         android:id="@+id/training_step_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:layout_weight="0"
         android:text="@string/training_step_add"
         android:textAlignment="center" />
 
