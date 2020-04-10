@@ -54,10 +54,7 @@ class TrainingStepDialog(
         dialog.show()
         // The positive button is disabled till training name is correct
         val okBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-        errorDuration(true)
-        errorPower(true)
-        hasErrors(okBtn)
-        view.training_duration.addTextChangedListener { text: Editable? ->
+        val trainingDurationChanged = { text: Editable? ->
             if (text.isNullOrEmpty() || text.isBlank() || text.length < 3) {
                 errorDuration(true)
                 hasErrors(okBtn)
@@ -72,7 +69,7 @@ class TrainingStepDialog(
                 }
             }
         }
-        view.training_power.addTextChangedListener { text: Editable? ->
+        val trainingPowerChanged = { text: Editable? ->
             if (text.isNullOrEmpty() || text.isBlank() || !text.isDigitsOnly()) {
                 errorPower(true)
                 hasErrors(okBtn)
@@ -81,6 +78,11 @@ class TrainingStepDialog(
                 hasErrors(okBtn)
             }
         }
+        trainingDurationChanged(view.training_duration.editableText)
+        trainingPowerChanged(view.training_power.editableText)
+        hasErrors(okBtn)
+        view.training_duration.addTextChangedListener { text: Editable? -> trainingDurationChanged(text) }
+        view.training_power.addTextChangedListener { text: Editable? -> trainingPowerChanged(text) }
     }
 
     private fun hasErrors(button: Button) {
