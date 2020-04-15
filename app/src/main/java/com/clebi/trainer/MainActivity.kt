@@ -1,5 +1,6 @@
 package com.clebi.trainer
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.clebi.trainer.devices.ConnectedDevicesStorage
 import com.clebi.trainer.devices.SharedPrefsConnectedDevicesStorage
+import com.clebi.trainer.devices.TrainerService
 import com.clebi.trainer.trainings.FileTrainingStorage
 import com.clebi.trainer.trainings.SharedPrefsTrainingStorage
 import com.clebi.trainer.trainings.TrainingsStorage
@@ -73,6 +75,10 @@ class MainActivity : AppCompatActivity() {
         ).get(
             DevicesConfigModel::class.java
         )
+
+        Intent(this, TrainerService::class.java).also {
+            this.startService(it)
+        }
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)

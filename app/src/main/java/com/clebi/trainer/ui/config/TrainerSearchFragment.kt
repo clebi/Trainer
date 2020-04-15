@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.clebi.trainer.R
 import com.clebi.trainer.devices.Device
-import com.clebi.trainer.devices.wahoo.WahooTrainerService
+import com.clebi.trainer.devices.TrainerService
 
 /**
  * TrainerSearchFragment manages the search of training devices.
@@ -25,7 +25,7 @@ class TrainerSearchFragment : Fragment() {
         const val TAG = "TrainerSearchFragment"
     }
 
-    private lateinit var configService: WahooTrainerService
+    private lateinit var configService: TrainerService
     private lateinit var trainerSearchListView: RecyclerView
     private val devicesConfigModel: DevicesConfigModel by activityViewModels()
 
@@ -37,7 +37,7 @@ class TrainerSearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        configService = WahooTrainerService.instance
+        configService = TrainerService.instance
         devicesConfigModel.resetSearchDevices()
     }
 

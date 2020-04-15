@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.clebi.trainer.R
-import com.clebi.trainer.devices.wahoo.WahooTrainerService
 import com.clebi.trainer.trainings.Format
 import com.clebi.trainer.ui.config.DevicesConfigModel
 import com.clebi.trainer.ui.trainings.TrainingFragmentArgs
@@ -28,12 +27,10 @@ class TrainingExecFragment : Fragment() {
     private val trainingsModel: TrainingsModel by activityViewModels()
     private val devicesConfigModel: DevicesConfigModel by activityViewModels()
 
-    private lateinit var configService: WahooTrainerService
     private lateinit var controller: TrainingExecController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        configService = WahooTrainerService.instance
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,7 +38,7 @@ class TrainingExecFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_training_exec, container, false)
         val training = trainingsModel.trainings.value!![position]
         val viewModel = TrainingExecViewModel(training)
-        controller = TrainingExecController(viewModel, devicesConfigModel, configService)
+        controller = TrainingExecController(viewModel, devicesConfigModel)
         try {
             controller.init()
             view.training_title.text = training.name

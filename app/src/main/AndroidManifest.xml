@@ -28,8 +28,8 @@
             </intent-filter>
         </activity>
         <service
-            android:name="com.clebi.trainer.devices.wahoo.WahooTrainerService"
-            android:exported="false"></service>
+            android:name="com.clebi.trainer.devices.TrainerService"
+            android:exported="false" />
     </application>
 
 </manifest>

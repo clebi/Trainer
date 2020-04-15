@@ -1,13 +1,14 @@
 package com.clebi.trainer.devices.wahoo
 
-import android.app.Service
-import android.content.Intent
-import android.os.IBinder
+import android.content.Context
 import android.util.Log
 import com.clebi.trainer.devices.Device
 import com.clebi.trainer.devices.DeviceType
+import com.clebi.trainer.devices.DiscoveredListener
+import com.clebi.trainer.devices.NetworkChangeListener
 import com.clebi.trainer.devices.NetworkState
 import com.clebi.trainer.devices.NetworkType
+import com.clebi.trainer.devices.TrainerApi
 import com.wahoofitness.connector.HardwareConnector
 import com.wahoofitness.connector.HardwareConnector.Listener
 import com.wahoofitness.connector.HardwareConnectorEnums
@@ -17,19 +18,12 @@ import com.wahoofitness.connector.conn.connections.params.ConnectionParams
 import com.wahoofitness.connector.listeners.discovery.DiscoveryListener
 
 /**
- * DiscoveredListener provides interface to notify device discovery to consumer.
+ * WahooTrainerApi is the implementation of TrainerApi which manages the communication with devices.
  */
-typealias DiscoveredListener = (device: Device) -> Unit
-typealias NetworkChangeListener = (networkType: NetworkType, networkState: NetworkState) -> Unit
-
-/**
- * WahooTrainerService communicates with Wahoo devices.
- */
-class WahooTrainerService : Service() {
+class WahooTrainerApi(context: Context) : TrainerApi {
 
     companion object {
-        lateinit var instance: WahooTrainerService
-        val TAG = "WahooTrainerService"
+        val TAG = "WahooTrainerApi"
 
         val sensorTypesToDeviceTypes = mapOf(
             HardwareConnectorTypes.SensorType.FITNESS_EQUIP to DeviceType.TRAINER,
@@ -50,7 +44,7 @@ class WahooTrainerService : Service() {
     /**
      * ServiceListener listen to wahoo service state changes.
      */
-    class ServiceListener : Listener {
+    private class ServiceListener : Listener {
         /** listeners for network changes */
         private val listeners = mutableListOf<NetworkChangeListener>()
 
@@ -97,7 +91,7 @@ class WahooTrainerService : Service() {
         }
     }
 
-    class SearchListener(
+    private inner class SearchListener(
         private val discoveredListeners: List<DiscoveredListener>
     ) : DiscoveryListener {
 
@@ -126,57 +120,45 @@ class WahooTrainerService : Service() {
         }
     }
 
-    private lateinit var hardwareConnector: HardwareConnector
     private val discoveredListeners = mutableListOf<DiscoveredListener>()
     private val searchListener =
         SearchListener(this.discoveredListeners)
     private val serviceListener = ServiceListener()
+    private val hardwareConnector = HardwareConnector(context, serviceListener)
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
+    override fun destroy() {
+        hardwareConnector.shutdown()
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        instance = this
-        hardwareConnector = HardwareConnector(this, serviceListener)
-    }
-
-    fun searchForDevices() {
+    override fun searchForDevices() {
         Log.d(TAG, "start discovery")
         hardwareConnector.startDiscovery(searchListener, HardwareConnectorTypes.NetworkType.BTLE)
     }
 
-    fun stopSearchForDevices() {
+    override fun stopSearchForDevices() {
         Log.d(TAG, "stop discovery")
         hardwareConnector.stopDiscovery(searchListener, HardwareConnectorTypes.NetworkType.BTLE)
     }
 
-    fun connectToDevice(device: Device): WahooConnectedDevice {
+    override fun connectToDevice(device: Device): WahooConnectedDevice {
         val connectedDevice = WahooConnectedDevice(device)
         hardwareConnector.requestSensorConnection(device.params as ConnectionParams, connectedDevice)
         return connectedDevice
     }
 
-    fun listenDevicesDiscovery(listener: DiscoveredListener) {
+    override fun listenDevicesDiscovery(listener: DiscoveredListener) {
         discoveredListeners.add(listener)
     }
 
-    fun unlistenDevicesDiscovery(listener: DiscoveredListener) {
+    override fun unlistenDevicesDiscovery(listener: DiscoveredListener) {
         discoveredListeners.remove(listener)
     }
 
-    /**
-     * Listen to network changes.
-     */
-    fun listenNetworkChange(listener: NetworkChangeListener) {
+    override fun listenNetworkChange(listener: NetworkChangeListener) {
         serviceListener.addListener(listener)
     }
 
-    /**
-     * Stop listening to network changes.
-     */
-    fun unlistenNetworkChange(listener: NetworkChangeListener) {
+    override fun unlistenNetworkChange(listener: NetworkChangeListener) {
         serviceListener.removeListener(listener)
     }
 }

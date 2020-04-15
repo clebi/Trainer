@@ -3,7 +3,6 @@ package com.clebi.trainer.ui.work
 import android.util.Log
 import com.clebi.trainer.devices.BikeTrainer
 import com.clebi.trainer.devices.DeviceCapability
-import com.clebi.trainer.devices.wahoo.WahooTrainerService
 import com.clebi.trainer.ui.config.DevicesConfigModel
 import java.util.Timer
 import java.util.TimerTask
@@ -13,8 +12,7 @@ import java.util.TimerTask
  */
 class TrainingExecController(
     private val trainingExecViewModel: TrainingExecViewModel,
-    private val devicesConfigModel: DevicesConfigModel,
-    private val trainerService: WahooTrainerService
+    private val devicesConfigModel: DevicesConfigModel
 ) {
     companion object {
         private const val TAG = "TrainingExecController"

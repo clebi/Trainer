@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebi.trainer.R
-import com.clebi.trainer.devices.wahoo.WahooTrainerService
+import com.clebi.trainer.devices.wahoo.WahooTrainerApi
 import com.clebi.trainer.trainings.Training
 import kotlinx.android.synthetic.main.dialog_training_name.view.*
 import kotlinx.android.synthetic.main.fragment_trainings.view.*
@@ -39,9 +39,6 @@ class TrainingsFragment : Fragment() {
         val initialize = savedInstanceState?.getBoolean(modelInitializedKey)
         if (initialize == null || !initialize) {
             trainingsModel.readFromStorage()
-        }
-        Intent(context, WahooTrainerService::class.java).also {
-            activity?.startService(it)
         }
     }
 

@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.clebi.trainer.R
 import com.clebi.trainer.devices.NetworkState
 import com.clebi.trainer.devices.NetworkType
-import com.clebi.trainer.devices.wahoo.WahooTrainerService
+import com.clebi.trainer.devices.TrainerService
 
 /**
  * TrainerConfigFragment is responsible for the trainers configuration
@@ -30,7 +30,7 @@ class TrainerConfigFragment : Fragment() {
     }
 
     /** The trainer service */
-    private lateinit var configService: WahooTrainerService
+    private lateinit var configService: TrainerService
 
     private val devicesConfigModel: DevicesConfigModel by activityViewModels()
 
@@ -59,7 +59,7 @@ class TrainerConfigFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        configService = WahooTrainerService.instance
+        configService = TrainerService.instance
         val devices = devicesConfigModel.readConnectedDevicesFromStorage()
         devices.forEach {
             val connectedDevice = configService.connectToDevice(it)
