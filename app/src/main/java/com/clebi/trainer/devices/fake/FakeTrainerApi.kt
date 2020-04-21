@@ -15,6 +15,8 @@ import java.util.TimerTask
 
 class FakeTrainerApi : TrainerApi {
 
+    override val provider = Fake.PROVIDER
+
     private val discoveryListeners = mutableListOf<DiscoveredListener>()
     private val networkChangeListener = mutableListOf<NetworkChangeListener>()
 

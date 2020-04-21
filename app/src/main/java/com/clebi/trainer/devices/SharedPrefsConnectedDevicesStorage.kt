@@ -2,7 +2,9 @@ package com.clebi.trainer.devices
 
 import android.content.Context
 import android.util.Log
+import com.clebi.trainer.devices.fake.Fake
 import com.clebi.trainer.devices.fake.FakeDevice
+import com.clebi.trainer.devices.wahoo.Wahoo
 import com.clebi.trainer.devices.wahoo.WahooDevice
 import com.clebi.trainer.trainings.FileTrainingStorage
 import com.clebi.trainer.trainings.TrainingsStorage
@@ -44,14 +46,14 @@ class SharedPrefsConnectedDevicesStorage(context: Context) : ConnectedDevicesSto
             }
             val provider = obj.getString("provider")
             val device = when (provider) {
-                FakeDevice.PROVIDER -> FakeDevice(
+                Fake.PROVIDER -> FakeDevice(
                     obj.getString("id"),
                     obj.getInt("antId"),
                     deviceType!!,
                     obj.getString("name"),
                     mapOf()
                 )
-                WahooDevice.PROVIDER -> WahooDevice(
+                Wahoo.PROVIDER -> WahooDevice(
                     obj.getString("id"),
                     obj.getInt("antId"),
                     deviceType!!,

@@ -41,6 +41,8 @@ class WahooTrainerApi(context: Context) : TrainerApi {
         )
     }
 
+    override val provider = Wahoo.PROVIDER
+
     /**
      * ServiceListener listen to wahoo service state changes.
      */

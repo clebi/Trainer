@@ -2,6 +2,7 @@ package com.clebi.trainer.devices.fake
 
 import com.clebi.trainer.devices.Device
 import com.clebi.trainer.devices.DeviceType
+import com.clebi.trainer.devices.fake.Fake.PROVIDER
 import org.json.JSONObject
 
 class FakeDevice(
@@ -11,10 +12,6 @@ class FakeDevice(
     override val name: String,
     override val params: Map<String, String>
 ) : Device {
-    companion object {
-        const val PROVIDER = "fake"
-    }
-
     override val provider = PROVIDER
 
     override fun jsonSerialize(): JSONObject {

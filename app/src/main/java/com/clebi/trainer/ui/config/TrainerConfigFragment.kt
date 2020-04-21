@@ -61,7 +61,9 @@ class TrainerConfigFragment : Fragment() {
         super.onCreate(savedInstanceState)
         configService = TrainerService.instance
         val devices = devicesConfigModel.readConnectedDevicesFromStorage()
-        devices.forEach {
+        devices.filter {
+            it.provider == configService.provider()
+        }.forEach {
             val connectedDevice = configService.connectToDevice(it)
             devicesConfigModel.addConnectedDevices(connectedDevice)
         }

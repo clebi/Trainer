@@ -7,6 +7,8 @@ typealias DiscoveredListener = (device: Device) -> Unit
 typealias NetworkChangeListener = (networkType: NetworkType, networkState: NetworkState) -> Unit
 
 interface TrainerApi {
+    val provider: String
+
     /**
      * Look for devices.
      */

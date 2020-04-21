@@ -31,6 +31,10 @@ class TrainerService : Service() {
         super.onDestroy()
     }
 
+    fun provider(): String {
+        return trainerApi.provider
+    }
+
     fun searchForDevices() {
         trainerApi.searchForDevices()
     }

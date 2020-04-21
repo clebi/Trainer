@@ -2,6 +2,7 @@ package com.clebi.trainer.devices.wahoo
 
 import com.clebi.trainer.devices.Device
 import com.clebi.trainer.devices.DeviceType
+import com.clebi.trainer.devices.wahoo.Wahoo.PROVIDER
 import com.wahoofitness.connector.conn.connections.params.ConnectionParams
 import org.json.JSONObject
 
@@ -15,10 +16,6 @@ data class WahooDevice(
     override val name: String,
     override val params: ConnectionParams
 ) : Device {
-    companion object {
-        const val PROVIDER = "wahoo"
-    }
-
     override val provider = PROVIDER
 
     override fun jsonSerialize(): JSONObject {
