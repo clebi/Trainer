@@ -2,6 +2,7 @@ package com.clebi.trainer.devices
 
 import android.content.Context
 import android.util.Log
+import com.clebi.trainer.devices.fake.FakeDevice
 import com.clebi.trainer.devices.wahoo.WahooDevice
 import com.clebi.trainer.trainings.FileTrainingStorage
 import com.clebi.trainer.trainings.TrainingsStorage
@@ -41,15 +42,28 @@ class SharedPrefsConnectedDevicesStorage(context: Context) : ConnectedDevicesSto
                 "POWER" -> DeviceType.POWER
                 else -> null
             }
-            devices.add(
-                WahooDevice(
+            val provider = obj.getString("provider")
+            val device = when (provider) {
+                FakeDevice.PROVIDER -> FakeDevice(
+                    obj.getString("id"),
+                    obj.getInt("antId"),
+                    deviceType!!,
+                    obj.getString("name"),
+                    mapOf()
+                )
+                WahooDevice.PROVIDER -> WahooDevice(
                     obj.getString("id"),
                     obj.getInt("antId"),
                     deviceType!!,
                     obj.getString("name"),
                     ConnectionParams.deserialize(obj.getString("params"))!!
                 )
-            )
+                else -> {
+                    Log.w(TAG, "unable to load device for provider: $provider")
+                    null
+                }
+            }
+            device?.let { devices.add(it) }
         }
         Log.d(TAG, "devices: $devices")
         return devices

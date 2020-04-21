@@ -22,6 +22,7 @@ class TrainerService : Service() {
     override fun onCreate() {
         super.onCreate()
         trainerApi = WahooTrainerApi(applicationContext)
+        // trainerApi = FakeTrainerApi()
         instance = this
     }
 

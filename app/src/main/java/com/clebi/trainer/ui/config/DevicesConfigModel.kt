@@ -29,9 +29,7 @@ class DevicesConfigModel(private val devicesStorages: Array<ConnectedDevicesStor
     fun addSearchDevice(device: Device) {
         val list = (_searchDevices.value ?: arrayListOf()).toMutableList()
         list.add(device)
-        _searchDevices.apply {
-            value = list
-        }
+        _searchDevices.postValue(list)
     }
 
     private val _connectedDevices: MutableLiveData<List<ConnectedDevice>> = MutableLiveData(listOf())

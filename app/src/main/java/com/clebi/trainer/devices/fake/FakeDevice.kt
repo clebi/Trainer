@@ -1,22 +1,18 @@
-package com.clebi.trainer.devices.wahoo
+package com.clebi.trainer.devices.fake
 
 import com.clebi.trainer.devices.Device
 import com.clebi.trainer.devices.DeviceType
-import com.wahoofitness.connector.conn.connections.params.ConnectionParams
 import org.json.JSONObject
 
-/**
- * WahooDevice is the implementation  of device for wahoo api.
- */
-data class WahooDevice(
+class FakeDevice(
     override val id: String,
     override val antId: Int,
     override val type: DeviceType,
     override val name: String,
-    override val params: ConnectionParams
+    override val params: Map<String, String>
 ) : Device {
     companion object {
-        const val PROVIDER = "wahoo"
+        const val PROVIDER = "fake"
     }
 
     override val provider = PROVIDER
@@ -28,7 +24,7 @@ data class WahooDevice(
         json.put("name", name)
         json.put("type", type)
         json.put("provider", provider)
-        json.put("params", params.serialize())
+        json.put("params", params)
         return json
     }
 }
