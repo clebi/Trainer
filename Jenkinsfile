@@ -16,7 +16,7 @@ node {
         sh './gradlew lint'
         sh './gradlew ktlintCheck'
         def android = scanForIssues tool: androidLintParser(pattern: '**/app/build/reports/lint-results.xml')
-        def ktlint = scanForIssues tool: ktLint(pattern: '**/app/build/reports/ktlint/**/*.txt')
+        def ktlint = scanForIssues tool: ktLint(pattern: '**/app/build/reports/ktlint/**/*.xml')
 
         publishIssues issues: [android, ktlint]
     }

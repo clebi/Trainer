@@ -34,6 +34,9 @@ android {
         android.set(true)
         outputColorName.set("RED")
         ignoreFailures.set(true)
+        reporters {
+            reporter "checkstyle"
+        }
     }
     testOptions {
         unitTests.returnDefaultValues = true
