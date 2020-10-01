@@ -18,7 +18,7 @@ node {
         def android = scanForIssues tool: androidLintParser(pattern: '**/app/build/reports/lint-results.xml')
         def ktlint = scanForIssues tool: ktLint(pattern: '**/app/build/reports/ktlint/**/*.txt')
 
-        publishIssues issues: [android]
+        publishIssues issues: [android, ktlint]
     }
     stage('Tests') {
         sh './gradlew test'
