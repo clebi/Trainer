@@ -18,9 +18,6 @@ class ConnectedDeviceListAdapter(
     private var connectedDevices: List<ConnectedDevice>
 ) :
     RecyclerView.Adapter<ConnectedDeviceListAdapter.DeviceListViewHolder>() {
-    companion object {
-        private const val TAG = "ConnectedDeviceListAdapter"
-    }
 
     private val deviceListeners = mutableListOf<ConnectedDeviceListener>()
 

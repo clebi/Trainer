@@ -44,8 +44,7 @@ class SharedPrefsConnectedDevicesStorage(context: Context) : ConnectedDevicesSto
                 "POWER" -> DeviceType.POWER
                 else -> null
             }
-            val provider = obj.getString("provider")
-            val device = when (provider) {
+            val device = when (val provider = obj.getString("provider")) {
                 Fake.PROVIDER -> FakeDevice(
                     obj.getString("id"),
                     obj.getInt("antId"),

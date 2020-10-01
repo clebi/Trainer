@@ -23,7 +23,7 @@ import com.wahoofitness.connector.listeners.discovery.DiscoveryListener
 class WahooTrainerApi(context: Context) : TrainerApi {
 
     companion object {
-        val TAG = "WahooTrainerApi"
+        const val TAG = "WahooTrainerApi"
 
         val sensorTypesToDeviceTypes = mapOf(
             HardwareConnectorTypes.SensorType.FITNESS_EQUIP to DeviceType.TRAINER,

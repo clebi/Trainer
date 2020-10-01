@@ -36,10 +36,11 @@ class FileTrainingStorage(private val context: Context) : TrainingsStorage {
         if (!file.exists()) {
             return TrainingsStorage.TrainingStorageContainer(0, STORAGE_TYPE, listOf())
         }
-        try {
-            return gson.fromJson(file.bufferedReader(), TrainingsStorage.TrainingStorageContainer::class.java)
+        return try {
+            gson.fromJson(file.bufferedReader(), TrainingsStorage.TrainingStorageContainer::class.java)
         } catch (exc: JsonSyntaxException) {
-            return TrainingsStorage.TrainingStorageContainer(0, STORAGE_TYPE, listOf())
+            Log.w(TAG, "unable to read from file storage, returning an empty trainings list")
+            TrainingsStorage.TrainingStorageContainer(0, STORAGE_TYPE, listOf())
         }
     }
 

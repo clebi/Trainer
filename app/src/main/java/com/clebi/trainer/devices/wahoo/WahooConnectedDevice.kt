@@ -74,10 +74,10 @@ class WahooConnectedDevice(override val device: Device) : ConnectedDevice, Senso
             HardwareConnectorEnums.SensorConnectionState.CONNECTED -> DeviceConnectionStatus.CONNECTED
             HardwareConnectorEnums.SensorConnectionState.DISCONNECTING -> DeviceConnectionStatus.DISCONNECTING
         }
-        if (status == DeviceConnectionStatus.CONNECTED) {
-            sensorConnection = connection
+        sensorConnection = if (status == DeviceConnectionStatus.CONNECTED) {
+            connection
         } else {
-            sensorConnection = null
+            null
         }
     }
 

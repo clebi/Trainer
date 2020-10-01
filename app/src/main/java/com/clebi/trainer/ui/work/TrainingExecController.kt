@@ -2,36 +2,56 @@ package com.clebi.trainer.ui.work
 
 import android.util.Log
 import com.clebi.trainer.devices.BikeTrainer
-import com.clebi.trainer.devices.DeviceCapability
-import com.clebi.trainer.ui.config.DevicesConfigModel
-import java.util.Timer
-import java.util.TimerTask
+import com.clebi.trainer.devices.ConnectedDevice
+import com.clebi.trainer.execution.TrainingExecService
 
 /**
  * TrainingExecController is responsible for actions for all training execution actions.
  */
 class TrainingExecController(
     private val trainingExecViewModel: TrainingExecViewModel,
-    private val devicesConfigModel: DevicesConfigModel
+    private val devices: List<ConnectedDevice>,
+    private val trainingExecService: TrainingExecService
 ) {
     companion object {
         private const val TAG = "TrainingExecController"
     }
 
-    private var timer: Timer? = null
     private lateinit var trainer: BikeTrainer
+
+    private val serviceListener = object : TrainingExecService.Listener {
+        override fun started() {
+            trainingExecViewModel.trainingStart()
+        }
+
+        override fun progressed(stepTime: Int, totalTime: Int, stepIndex: Int) {
+            trainingExecViewModel.setProgress(totalTime, stepTime, stepIndex)
+        }
+
+        override fun paused() {
+            trainingExecViewModel.trainingPaused()
+        }
+
+        override fun stopped() {
+            trainingExecViewModel.trainingStop()
+        }
+
+        override fun ended() {
+            Log.d(TAG, "training ended")
+            trainingExecViewModel.trainingEnd()
+            trainingExecService.stopService()
+        }
+    }
 
     /**
      * Initialize the training by getting the trainer device.
      */
-    fun init() {
-        val trainerDevice = devicesConfigModel.connectedDevices.value!!.stream()
-            .filter { it.capabilities.contains(DeviceCapability.BIKE_TRAINER) }
-            .findFirst()
-        if (!trainerDevice.isPresent) {
-            throw IllegalStateException("unable to find trainer")
+    fun init(trainer: BikeTrainer) {
+        trainingExecService.listen(serviceListener)
+        Log.d(TAG, "initiated: ${trainingExecService.initiated()}")
+        if (!trainingExecService.initiated()) {
+            trainingExecService.initialize(trainer, trainingExecViewModel.training)
         }
-        trainer = trainerDevice.get().getBikeTrainer()
     }
 
     /**
@@ -46,45 +66,22 @@ class TrainingExecController(
      * Start the training.
      */
     fun start() {
-        timer = Timer()
-        timer!!.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-                val stepTime = trainingExecViewModel.decreaseRemainingStepTime()
-                val totalTime = trainingExecViewModel.decreaseRemainingTotalTime()
-                if (totalTime <= 0) {
-                    end()
-                    return
-                }
-                if (stepTime <= 0) {
-                    trainingExecViewModel.nextStep()
-                }
-            }
-        }, 0, 1000)
-        trainingExecViewModel.trainingStart()
+        trainingExecService.start()
     }
 
     /**
      * Pause the training.
      */
     fun pause() {
-        timer?.cancel()
-        trainingExecViewModel.trainingPaused()
-    }
-
-    /**
-     * End a training.
-     */
-    private fun end() {
-        timer?.cancel()
-        trainingExecViewModel.trainingEnd()
+        trainingExecService.pause()
     }
 
     /**
      * Stop a training.
      */
     fun stop() {
-        timer?.cancel()
-        trainingExecViewModel.trainingStop()
+        trainingExecService.stop()
+        trainingExecService.unlisten(serviceListener)
     }
 
     /**
