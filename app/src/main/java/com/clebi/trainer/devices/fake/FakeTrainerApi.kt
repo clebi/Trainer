@@ -25,13 +25,16 @@ class FakeTrainerApi : TrainerApi {
             it(NetworkType.BLUETOOTH, NetworkState.ENABLED)
         }
         val timer = Timer()
-        timer.schedule(object : TimerTask() {
-            override fun run() {
-                discoveryListeners.forEach {
-                    it(FakeDevice("fake_id", 123456, DeviceType.TRAINER, "fake_device", mapOf()))
+        timer.schedule(
+            object : TimerTask() {
+                override fun run() {
+                    discoveryListeners.forEach {
+                        it(FakeDevice("fake_id", 123456, DeviceType.TRAINER, "fake_device", mapOf()))
+                    }
                 }
-            }
-        }, 3000)
+            },
+            3000
+        )
     }
 
     override fun stopSearchForDevices() {

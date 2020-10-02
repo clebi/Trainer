@@ -48,9 +48,7 @@ class TrainerSearchFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_trainer_search, container, false)
         val trainerSearchListAdapter = DeviceListAdapter(devicesConfigModel.searchDevices.value!!) { device ->
             Log.d(TAG, "device add: ${device.name} - ${device.id}")
-            if (devicesConfigModel.connectedDevices.value!!.filter {
-                    it.device.id == device.id
-                }.count() > 0) {
+            if (devicesConfigModel.connectedDevices.value!!.filter { it.device.id == device.id }.count() > 0) {
                 Log.d(TAG, "device already exists: ${device.name} - ${device.id}")
                 val toast = Toast.makeText(
                     context,
@@ -69,9 +67,12 @@ class TrainerSearchFragment : Fragment() {
             adapter = trainerSearchListAdapter
             layoutManager = LinearLayoutManager(this.context)
         }
-        devicesConfigModel.searchDevices.observe(viewLifecycleOwner, {
-            trainerSearchListAdapter.setDevices(it)
-        })
+        devicesConfigModel.searchDevices.observe(
+            viewLifecycleOwner,
+            {
+                trainerSearchListAdapter.setDevices(it)
+            }
+        )
         return view
     }
 

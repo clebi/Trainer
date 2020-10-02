@@ -59,7 +59,8 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize the trainings model
         val trainingsModel = ViewModelProvider(
-            this, TrainingsModelFactory(
+            this,
+            TrainingsModelFactory(
                 arrayOf(
                     FileTrainingStorage(applicationContext),
                     SharedPrefsTrainingStorage(applicationContext)
@@ -73,7 +74,8 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize the devices config model
         ViewModelProvider(
-            this, DevicesModelFactory(
+            this,
+            DevicesModelFactory(
                 arrayOf(
                     SharedPrefsConnectedDevicesStorage(applicationContext)
                 )

@@ -63,32 +63,37 @@ class TrainingFragment : Fragment() {
             adapter = trainingStepsListAdapter
             layoutManager = stepsLayoutManager
         }
-        val touchHelper = ItemTouchHelper(trainingStepsListAdapter.TouchHelper({ from: Int, to: Int ->
-            if (from == to) {
-                return@TouchHelper
-            }
-            Log.d(TAG, "dragFrom: $from - dragTo: $to")
-            try {
-                trainingsModel.moveStep(position, from, to)
-            } catch (exc: IllegalArgumentException) {
-                Log.w(TAG, exc)
-            }
-        }, { stepPosition ->
-            trainingsModel.deleteStep(position, stepPosition)
-        }))
-        touchHelper.attachToRecyclerView(view.training_steps)
-        view.training_steps.addItemDecoration(
-            DividerItemDecoration(
-                view.training_steps.context,
-                stepsLayoutManager.orientation
+        val touchHelper = ItemTouchHelper(
+            trainingStepsListAdapter.TouchHelper(
+                { from: Int, to: Int ->
+                    if (from == to) {
+                        return@TouchHelper
+                    }
+                    Log.d(TAG, "dragFrom: $from - dragTo: $to")
+                    try {
+                        trainingsModel.moveStep(position, from, to)
+                    } catch (exc: IllegalArgumentException) {
+                        Log.w(TAG, exc)
+                    }
+                },
+                { stepPosition ->
+                    trainingsModel.deleteStep(position, stepPosition)
+                }
             )
         )
-        trainingsModel.trainings.observe(viewLifecycleOwner, { trainings ->
-            val training = trainings[position]
-            Log.d(TAG, "training: $training")
-            view.training_title.text = training.name
-            trainingStepsListAdapter.setTrainingSteps(training.steps)
-        })
+        touchHelper.attachToRecyclerView(view.training_steps)
+        view.training_steps.addItemDecoration(
+            DividerItemDecoration(view.training_steps.context, stepsLayoutManager.orientation)
+        )
+        trainingsModel.trainings.observe(
+            viewLifecycleOwner,
+            { trainings ->
+                val training = trainings[position]
+                Log.d(TAG, "training: $training")
+                view.training_title.text = training.name
+                trainingStepsListAdapter.setTrainingSteps(training.steps)
+            }
+        )
         view.training_launch.setOnClickListener {
             val device = (requireContext().applicationContext as TrainerApp).devices?.stream()
                 ?.filter { it.capabilities.contains(DeviceCapability.BIKE_TRAINER) }

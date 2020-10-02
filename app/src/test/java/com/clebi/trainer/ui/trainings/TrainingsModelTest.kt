@@ -19,8 +19,13 @@ class TrainingsModelTest {
     fun testReadFromStorage() {
         val time = 20000L
         val trainings = listOf(
-            Training("test_0", listOf(TrainingStep(120, 150))), Training(
-                "test_1", listOf(
+            Training(
+                "test_0",
+                listOf(TrainingStep(120, 150))
+            ),
+            Training(
+                "test_1",
+                listOf(
                     TrainingStep(24, 120)
                 )
             )
@@ -37,8 +42,13 @@ class TrainingsModelTest {
     @Test
     fun testSaveToStorage() {
         val trainings = listOf(
-            Training("test_0", listOf(TrainingStep(120, 150))), Training(
-                "test_1", listOf(
+            Training(
+                "test_0",
+                listOf(TrainingStep(120, 150))
+            ),
+            Training(
+                "test_1",
+                listOf(
                     TrainingStep(24, 120)
                 )
             )

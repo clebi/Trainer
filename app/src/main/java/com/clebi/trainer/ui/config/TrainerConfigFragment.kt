@@ -79,12 +79,18 @@ class TrainerConfigFragment : Fragment() {
             adapter = connectedDeviceListAdapter
             layoutManager = LinearLayoutManager(this.context)
         }
-        devicesConfigModel.connectedDevices.observe(viewLifecycleOwner, {
-            (requireContext().applicationContext as TrainerApp).devices = it
-        })
-        devicesConfigModel.connectedDevices.observe(viewLifecycleOwner, {
-            connectedDeviceListAdapter.setDevices(it)
-        })
+        devicesConfigModel.connectedDevices.observe(
+            viewLifecycleOwner,
+            {
+                (requireContext().applicationContext as TrainerApp).devices = it
+            }
+        )
+        devicesConfigModel.connectedDevices.observe(
+            viewLifecycleOwner,
+            {
+                connectedDeviceListAdapter.setDevices(it)
+            }
+        )
         return view
     }
 

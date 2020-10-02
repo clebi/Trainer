@@ -37,14 +37,16 @@ class TrainingsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_trainings, container, false)
-        val trainingListAdapter = TrainingsListAdapter(listOf(), { position ->
-            Log.d(TAG, "click on training: $position")
-            val action = TrainingsFragmentDirections.actionNavHomeToTrainingFragment(position)
-            findNavController().navigate(action)
-        }, { position -> trainingsModel.removeTraining(position) })
-        trainingsModel.trainings.observe(viewLifecycleOwner, {
-            trainingListAdapter.setTrainings(it)
-        })
+        val trainingListAdapter = TrainingsListAdapter(
+            listOf(),
+            { position ->
+                Log.d(TAG, "click on training: $position")
+                val action = TrainingsFragmentDirections.actionNavHomeToTrainingFragment(position)
+                findNavController().navigate(action)
+            },
+            { position -> trainingsModel.removeTraining(position) }
+        )
+        trainingsModel.trainings.observe(viewLifecycleOwner, { trainingListAdapter.setTrainings(it) })
         val trainingsLayoutManager = LinearLayoutManager(context)
         view.trainings_list.apply {
             adapter = trainingListAdapter

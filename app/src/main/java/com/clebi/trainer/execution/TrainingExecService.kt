@@ -77,34 +77,38 @@ class TrainingExecService : Service() {
             throw IllegalStateException("already executing a training")
         }
         timer = Timer()
-        timer!!.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-                time += 1
-                Log.d(TAG, "time: $time - currentStep: $currentStep")
-                var stepTime = time - processStepTime
-                Log.d(TAG, "stepTime: $stepTime")
-                if (stepTime >= currentTraining!!.steps[currentStep].duration) {
-                    Log.d(TAG, "next step from: $currentStep")
-                    processStepTime += currentTraining!!.steps[currentStep].duration
-                    Log.d(TAG, "next step processed step time: $processStepTime")
-                    currentStep += 1
-                    if (currentStep >= currentTraining!!.steps.count()) {
-                        Log.d(TAG, "no more step to run")
-                        timer!!.cancel()
-                        listeners.forEach {
-                            it.progressed(stepTime, time, currentStep - 1)
-                            it.ended()
+        timer!!.scheduleAtFixedRate(
+            object : TimerTask() {
+                override fun run() {
+                    time += 1
+                    Log.d(TAG, "time: $time - currentStep: $currentStep")
+                    var stepTime = time - processStepTime
+                    Log.d(TAG, "stepTime: $stepTime")
+                    if (stepTime >= currentTraining!!.steps[currentStep].duration) {
+                        Log.d(TAG, "next step from: $currentStep")
+                        processStepTime += currentTraining!!.steps[currentStep].duration
+                        Log.d(TAG, "next step processed step time: $processStepTime")
+                        currentStep += 1
+                        if (currentStep >= currentTraining!!.steps.count()) {
+                            Log.d(TAG, "no more step to run")
+                            timer!!.cancel()
+                            listeners.forEach {
+                                it.progressed(stepTime, time, currentStep - 1)
+                                it.ended()
+                            }
+                            return
                         }
-                        return
+                        currentPower = currentTraining!!.steps[currentStep].power
+                        stepTime = 0
                     }
-                    currentPower = currentTraining!!.steps[currentStep].power
-                    stepTime = 0
+                    listeners.forEach {
+                        it.progressed(stepTime, time, currentStep)
+                    }
                 }
-                listeners.forEach {
-                    it.progressed(stepTime, time, currentStep)
-                }
-            }
-        }, 0, 1000)
+            },
+            0,
+            1000
+        )
         currentPower = currentTraining!!.steps[0].power
         listeners.forEach {
             it.started()

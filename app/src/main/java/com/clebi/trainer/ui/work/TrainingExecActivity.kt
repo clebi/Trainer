@@ -68,7 +68,8 @@ class TrainingExecActivity : AppCompatActivity() {
 
         // Initialize the trainings model
         trainingsModel = ViewModelProvider(
-            this, TrainingsModelFactory(
+            this,
+            TrainingsModelFactory(
                 arrayOf(
                     FileTrainingStorage(applicationContext),
                     SharedPrefsTrainingStorage(applicationContext)
@@ -100,33 +101,48 @@ class TrainingExecActivity : AppCompatActivity() {
             }
             bikeTrainer = trainerDevice.get().getBikeTrainer()
             training_title.text = training.name
-            viewModel.currentStep.observe(this, {
-                training_step.text = resources.getText(R.string.training_step_pos).toString()
-                    .format(it, training.steps.count())
-            })
-            viewModel.currentPower.observe(this, {
-                training_power.text = "${it}W"
-                controller?.setTrainerPower(it)
-            })
-            viewModel.remainingTotalTime.observe(this, {
-                training_duration.text = Format.formatShortDuration(it)
-            })
-            viewModel.remainingStepTime.observe(this, {
-                training_step_duration.text = Format.formatShortDuration(it)
-            })
-            viewModel.currentStatus.observe(this, {
-                val text = when (it) {
-                    TrainingStatus.RUN -> resources.getString(R.string.training_status_play)
-                    TrainingStatus.PAUSE -> resources.getString(R.string.training_status_paused)
-                    TrainingStatus.END -> resources.getString(R.string.training_status_end)
-                    TrainingStatus.STOP -> {
-                        finish()
-                        ""
-                    }
-                    else -> ""
+            viewModel.currentStep.observe(
+                this,
+                {
+                    training_step.text = resources.getText(R.string.training_step_pos).toString()
+                        .format(it, training.steps.count())
                 }
-                training_status.text = text
-            })
+            )
+            viewModel.currentPower.observe(
+                this,
+                {
+                    training_power.text = "${it}W"
+                    controller?.setTrainerPower(it)
+                }
+            )
+            viewModel.remainingTotalTime.observe(
+                this,
+                {
+                    training_duration.text = Format.formatShortDuration(it)
+                }
+            )
+            viewModel.remainingStepTime.observe(
+                this,
+                {
+                    training_step_duration.text = Format.formatShortDuration(it)
+                }
+            )
+            viewModel.currentStatus.observe(
+                this,
+                {
+                    val text = when (it) {
+                        TrainingStatus.RUN -> resources.getString(R.string.training_status_play)
+                        TrainingStatus.PAUSE -> resources.getString(R.string.training_status_paused)
+                        TrainingStatus.END -> resources.getString(R.string.training_status_end)
+                        TrainingStatus.STOP -> {
+                            finish()
+                            ""
+                        }
+                        else -> ""
+                    }
+                    training_status.text = text
+                }
+            )
             training_play.setOnClickListener {
                 Log.d(TAG, "start: $controller")
                 controller?.start()
