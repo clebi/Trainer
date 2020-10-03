@@ -177,6 +177,7 @@ class TrainingExecActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
+        this.controller?.stop()
         this.unbindService(connection)
         super.onStop()
     }

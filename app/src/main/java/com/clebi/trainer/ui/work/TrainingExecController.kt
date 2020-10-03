@@ -39,7 +39,6 @@ class TrainingExecController(
         override fun ended() {
             Log.d(TAG, "training ended")
             trainingExecViewModel.trainingEnd()
-            trainingExecService.stopService()
         }
     }
 
@@ -47,6 +46,7 @@ class TrainingExecController(
      * Initialize the training by getting the trainer device.
      */
     fun init(trainer: BikeTrainer) {
+        this.trainer = trainer
         trainingExecService.listen(serviceListener)
         Log.d(TAG, "initiated: ${trainingExecService.initiated()}")
         if (!trainingExecService.initiated()) {

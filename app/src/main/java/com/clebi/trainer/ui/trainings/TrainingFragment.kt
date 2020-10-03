@@ -123,6 +123,7 @@ class TrainingFragment : Fragment() {
                     steps.add(TrainingStep(Format.shortDurationFromString(duration), power.toShort()))
                     val newTraining = training.copy(steps = steps)
                     trainingsModel.replaceTraining(position, newTraining)
+                    trainingsModel.saveToStorage()
                 }
             dialog.create()
             dialog.show()

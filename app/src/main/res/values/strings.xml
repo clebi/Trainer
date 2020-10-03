@@ -55,4 +55,7 @@
 
     <!--Training exec service -->
     <string name="service_notif_title">Training in progress...</string>
+    <string name="service_notif_progress">Step %d/%d - remaining : %s</string>
+    <string name="service_notif_end">End</string>
+    <string name="service_notif_pause">Paused</string>
 </resources>

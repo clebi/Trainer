@@ -6,15 +6,19 @@ import android.app.Service
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Binder
+import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
+import androidx.core.app.NotificationManagerCompat
 import com.clebi.trainer.R
 import com.clebi.trainer.StaticConfig
 import com.clebi.trainer.devices.BikeTrainer
+import com.clebi.trainer.trainings.Format
 import com.clebi.trainer.trainings.Training
 import com.clebi.trainer.ui.work.TrainingExecActivity
 import java.util.Timer
 import java.util.TimerTask
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.properties.Delegates
 
 class TrainingExecService : Service() {
@@ -37,10 +41,13 @@ class TrainingExecService : Service() {
 
     private val binder = LocalBinder()
 
+    private val notifier = InnerListener()
+    private var extras: Bundle? = null
+
     private var trainer: BikeTrainer? = null
     private var currentTraining: Training? = null
     private var timer: Timer? = null
-    private val listeners = mutableListOf<Listener>()
+    private val listeners = CopyOnWriteArrayList<Listener>()
 
     private var _initiated = false
     private var time = 0
@@ -63,10 +70,15 @@ class TrainingExecService : Service() {
     fun initialize(trainer: BikeTrainer, training: Training) {
         this.trainer = trainer
         currentTraining = training
+        reset()
+        _initiated = true
+        listen(notifier)
+    }
+
+    private fun reset() {
         time = 0
         currentStep = 0
         processStepTime = 0
-        _initiated = true
     }
 
     fun start() {
@@ -76,6 +88,7 @@ class TrainingExecService : Service() {
         if (timer != null) {
             throw IllegalStateException("already executing a training")
         }
+        reset()
         timer = Timer()
         timer!!.scheduleAtFixedRate(
             object : TimerTask() {
@@ -91,7 +104,6 @@ class TrainingExecService : Service() {
                         currentStep += 1
                         if (currentStep >= currentTraining!!.steps.count()) {
                             Log.d(TAG, "no more step to run")
-                            timer!!.cancel()
                             listeners.forEach {
                                 it.progressed(stepTime, time, currentStep - 1)
                                 it.ended()
@@ -124,7 +136,6 @@ class TrainingExecService : Service() {
             it.stopped()
         }
         stopService()
-        Log.d(TAG, "service stopped")
     }
 
     fun pause() {
@@ -138,29 +149,68 @@ class TrainingExecService : Service() {
     fun initiated() = _initiated
 
     fun stopService() {
+        unlisten(notifier)
         stopSelf()
         stopForeground(true)
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val pendingIntent = Intent(this, TrainingExecActivity::class.java).let {
-            if (intent !== null && intent.extras !== null) {
-                it.putExtras(intent.extras!!)
-            }
-            it.flags = FLAG_ACTIVITY_NEW_TASK
-            PendingIntent.getActivity(this, 0, it, PendingIntent.FLAG_UPDATE_CURRENT)
+    inner class InnerListener : Listener {
+        override fun started() {
         }
-        val notification = Notification.Builder(this, StaticConfig.TRAINING_SERVICE_CHANNEL_ID)
-            .setContentTitle(getText(R.string.service_notif_title))
-            .setContentText(getText(R.string.service_notif_title))
-            .setSmallIcon(R.drawable.notif_icon)
-            .setContentIntent(pendingIntent)
-            .build()
-        startForeground(NOTIFICATION_ID, notification)
+
+        override fun progressed(stepTime: Int, totalTime: Int, stepIndex: Int) {
+            val step = currentTraining!!.steps[stepIndex]
+            val notification = buildNotification(
+                extras,
+                getText(R.string.service_notif_progress).toString().format(
+                    stepIndex + 1,
+                    currentTraining?.steps?.size,
+                    Format.formatShortDuration(step.duration - stepTime)
+                )
+            )
+            NotificationManagerCompat.from(applicationContext).notify(NOTIFICATION_ID, notification)
+        }
+
+        override fun paused() {
+            val notification = buildNotification(extras, getText(R.string.service_notif_pause))
+            NotificationManagerCompat.from(applicationContext).notify(NOTIFICATION_ID, notification)
+        }
+
+        override fun stopped() {
+        }
+
+        override fun ended() {
+            val notification = buildNotification(extras, getText(R.string.service_notif_end))
+            NotificationManagerCompat.from(applicationContext).notify(NOTIFICATION_ID, notification)
+            timer?.cancel()
+            timer = null
+            currentStep = 0
+        }
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        extras = intent?.extras
+        startForeground(NOTIFICATION_ID, buildNotification(extras, getText(R.string.service_notif_title)))
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         return binder
+    }
+
+    private fun buildNotification(extras: Bundle?, text: CharSequence): Notification {
+        val pendingIntent = Intent(this, TrainingExecActivity::class.java).let {
+            extras?.run {
+                it.putExtras(this)
+            }
+            it.flags = FLAG_ACTIVITY_NEW_TASK
+            PendingIntent.getActivity(this, 0, it, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+        return Notification.Builder(this, StaticConfig.TRAINING_SERVICE_CHANNEL_ID)
+            .setContentTitle(getText(R.string.service_notif_title))
+            .setContentText(text)
+            .setSmallIcon(R.drawable.notif_icon)
+            .setContentIntent(pendingIntent)
+            .build()
     }
 }
