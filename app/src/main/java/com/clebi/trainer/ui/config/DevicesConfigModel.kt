@@ -48,9 +48,7 @@ class DevicesConfigModel(private val devicesStorages: Array<ConnectedDevicesStor
         }
         val devices = mutableListOf<Device>()
         trainingsContainer[0].forEach { device ->
-            if (_connectedDevices.value!!.filter {
-                    it.device.id == device.id
-                }.count() < 1) {
+            if (_connectedDevices.value!!.filter { it.device.id == device.id }.count() < 1) {
                 devices.add(device)
             }
         }
@@ -72,9 +70,7 @@ class DevicesConfigModel(private val devicesStorages: Array<ConnectedDevicesStor
 
     fun addConnectedDevices(device: ConnectedDevice) {
         val list = (_connectedDevices.value ?: listOf()).toMutableList()
-        if (list.filter {
-                it.device.id == device.device.id
-            }.count() > 0) {
+        if (list.filter { it.device.id == device.device.id }.count() > 0) {
             return
         }
         list.add(device)

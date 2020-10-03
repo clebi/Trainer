@@ -23,6 +23,7 @@ class TrainingsModel(private val trainingsStorages: Array<TrainingsStorage>) : V
      * Replace the list of trainings.
      */
     fun readFromStorage() {
+        Log.d(TAG, "read trainings from storages: ${trainingsStorages.count()}")
         val trainingsContainer = trainingsStorages.mapNotNull { item ->
             if (item.isAccessible()) {
                 item.read()

@@ -9,11 +9,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.clebi.trainer.R
+import com.clebi.trainer.TrainerApp
 import com.clebi.trainer.devices.NetworkState
 import com.clebi.trainer.devices.NetworkType
 import com.clebi.trainer.devices.TrainerService
@@ -24,10 +24,6 @@ import com.clebi.trainer.devices.TrainerService
  * It shall manage the known devices.
  */
 class TrainerConfigFragment : Fragment() {
-
-    companion object {
-        private const val TAG = "TrainerConfigFragment"
-    }
 
     /** The trainer service */
     private lateinit var configService: TrainerService
@@ -46,11 +42,11 @@ class TrainerConfigFragment : Fragment() {
         when (networkType) {
             NetworkType.BLUETOOTH -> {
                 if (networkState == NetworkState.ENABLED) {
-                    view!!.findViewById<TextView>(R.id.warningTxt).visibility = View.GONE
-                    view!!.findViewById<Button>(R.id.trainer_search_btn).isEnabled = true
+                    requireView().findViewById<TextView>(R.id.warningTxt).visibility = View.GONE
+                    requireView().findViewById<Button>(R.id.trainer_search_btn).isEnabled = true
                 } else {
-                    view!!.findViewById<TextView>(R.id.warningTxt).visibility = View.VISIBLE
-                    view!!.findViewById<Button>(R.id.trainer_search_btn).isEnabled = false
+                    requireView().findViewById<TextView>(R.id.warningTxt).visibility = View.VISIBLE
+                    requireView().findViewById<Button>(R.id.trainer_search_btn).isEnabled = false
                 }
             }
         }
@@ -66,6 +62,7 @@ class TrainerConfigFragment : Fragment() {
         }.forEach {
             val connectedDevice = configService.connectToDevice(it)
             devicesConfigModel.addConnectedDevices(connectedDevice)
+            (requireContext().applicationContext as TrainerApp).devices = devicesConfigModel.connectedDevices.value
         }
     }
 
@@ -82,9 +79,18 @@ class TrainerConfigFragment : Fragment() {
             adapter = connectedDeviceListAdapter
             layoutManager = LinearLayoutManager(this.context)
         }
-        devicesConfigModel.connectedDevices.observe(viewLifecycleOwner, Observer {
-            connectedDeviceListAdapter.setDevices(it)
-        })
+        devicesConfigModel.connectedDevices.observe(
+            viewLifecycleOwner,
+            {
+                (requireContext().applicationContext as TrainerApp).devices = it
+            }
+        )
+        devicesConfigModel.connectedDevices.observe(
+            viewLifecycleOwner,
+            {
+                connectedDeviceListAdapter.setDevices(it)
+            }
+        )
         return view
     }
 

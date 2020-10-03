@@ -18,7 +18,6 @@
     <string name="training_step_add">Add new step</string>
     <string name="training_step_num">Step %d</string>
     <string name="training_new_dialog_title">New training</string>
-    <string name="training_name_input_title">Training name: </string>
     <string name="training_name_input">Name your training</string>
     <string name="training_step_power">Power: </string>
     <string name="training_launch">Launch</string>
@@ -36,7 +35,6 @@
     <string name="training_status_paused">Paused...</string>
     <string name="training_status_end">Well done.</string>
     <string name="training_device_not_connected">Unable to find trainer, check your configuration !</string>
-    <string name="training_power_increase">Increase power</string>
     <string name="training_power_reduce">Reduce power</string>
 
     <!--Settings fragment-->
@@ -54,4 +52,10 @@
     <string name="menu_search">Search</string>
     <string name="trainer_search_add">Add device</string>
     <string name="training_device_already_exists">Device already known !</string>
+
+    <!--Training exec service -->
+    <string name="service_notif_title">Training in progress...</string>
+    <string name="service_notif_progress">Step %d/%d - remaining : %s</string>
+    <string name="service_notif_end">End</string>
+    <string name="service_notif_pause">Paused</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.clebi.trainer.ui.trainings
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
@@ -11,12 +10,10 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebi.trainer.R
-import com.clebi.trainer.devices.wahoo.WahooTrainerApi
 import com.clebi.trainer.trainings.Training
 import kotlinx.android.synthetic.main.dialog_training_name.view.*
 import kotlinx.android.synthetic.main.fragment_trainings.view.*
@@ -33,15 +30,6 @@ class TrainingsFragment : Fragment() {
 
     private val trainingsModel: TrainingsModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate: $savedInstanceState")
-        val initialize = savedInstanceState?.getBoolean(modelInitializedKey)
-        if (initialize == null || !initialize) {
-            trainingsModel.readFromStorage()
-        }
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(modelInitializedKey, true)
@@ -49,14 +37,16 @@ class TrainingsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_trainings, container, false)
-        val trainingListAdapter = TrainingsListAdapter(listOf(), { position ->
-            Log.d(TAG, "click on training: $position")
-            val action = TrainingsFragmentDirections.actionNavHomeToTrainingFragment(position)
-            findNavController().navigate(action)
-        }, { position -> trainingsModel.removeTraining(position) })
-        trainingsModel.trainings.observe(viewLifecycleOwner, Observer {
-            trainingListAdapter.setTrainings(it)
-        })
+        val trainingListAdapter = TrainingsListAdapter(
+            listOf(),
+            { position ->
+                Log.d(TAG, "click on training: $position")
+                val action = TrainingsFragmentDirections.actionNavHomeToTrainingFragment(position)
+                findNavController().navigate(action)
+            },
+            { position -> trainingsModel.removeTraining(position) }
+        )
+        trainingsModel.trainings.observe(viewLifecycleOwner, { trainingListAdapter.setTrainings(it) })
         val trainingsLayoutManager = LinearLayoutManager(context)
         view.trainings_list.apply {
             adapter = trainingListAdapter

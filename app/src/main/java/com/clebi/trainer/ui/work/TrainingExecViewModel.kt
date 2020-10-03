@@ -12,15 +12,17 @@ enum class TrainingStatus {
 /**
  * TrainingExecViewModel contains all necessary information for a training execution.
  */
-class TrainingExecViewModel(private val training: Training) : ViewModel() {
+class TrainingExecViewModel(val training: Training) : ViewModel() {
+    private val totalTime = training.steps.stream().mapToInt {
+        it.duration
+    }.sum()
+
     private val _currentStep = MutableLiveData(0)
 
     /** Current step of the training */
     val currentStep: LiveData<Int> = _currentStep
 
-    private val _remainingTotalTime = MutableLiveData(training.steps.stream().mapToInt {
-        it.duration
-    }.sum())
+    private val _remainingTotalTime = MutableLiveData(totalTime)
 
     /** remaining time of the training */
     val remainingTotalTime: LiveData<Int> = _remainingTotalTime
@@ -40,37 +42,10 @@ class TrainingExecViewModel(private val training: Training) : ViewModel() {
     /** Status of the training */
     val currentStatus: LiveData<TrainingStatus> = _currentStatus
 
-    /**
-     * Decrease the total time of the training execution.
-     */
-    fun decreaseRemainingTotalTime(): Int {
-        val time = _remainingTotalTime.value!! - 1
-        _remainingTotalTime.postValue(_remainingTotalTime.value!! - 1)
-        return time
-    }
-
-    /**
-     * Decrease the step time of the training execution.
-     */
-    fun decreaseRemainingStepTime(): Int {
-        val time = _remainingStepTime.value!! - 1
-        _remainingStepTime.postValue(time)
-        return time
-    }
-
-    /**
-     * Push training to next step.
-     */
-    fun nextStep() {
-        val currentStep = _currentStep.value!! + 1
-        if (currentStep >= training.steps.count()) {
-            throw IllegalStateException("no more steps")
-        }
-        val remainingStepTime = training.steps[currentStep].duration
-        val currentPower = training.steps[currentStep].power
-        _currentStep.postValue(currentStep)
-        _remainingStepTime.postValue(remainingStepTime)
-        _currentPower.postValue(currentPower)
+    fun setProgress(totalTime: Int, stepTime: Int, currentStep: Int) {
+        _remainingTotalTime.postValue(this.totalTime - totalTime)
+        _remainingStepTime.postValue(training.steps[currentStep].duration - stepTime)
+        _currentStep.postValue(currentStep + 1)
     }
 
     /**

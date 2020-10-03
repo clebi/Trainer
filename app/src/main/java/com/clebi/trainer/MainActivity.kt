@@ -26,7 +26,8 @@ import com.google.android.material.navigation.NavigationView
 /**
  * TrainingsModelFactory builds trainings model with constructor params.
  */
-class TrainingsModelFactory(private val trainingsStorages: Array<TrainingsStorage>) : ViewModelProvider.Factory {
+private class TrainingsModelFactory(private val trainingsStorages: Array<TrainingsStorage>) :
+    ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return TrainingsModel(trainingsStorages) as T
@@ -44,6 +45,9 @@ class DevicesModelFactory(private val devicesStorages: Array<ConnectedDevicesSto
 }
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        const val TAG = "MainActivity"
+    }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -54,8 +58,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // Initialize the trainings model
-        ViewModelProvider(
-            this, TrainingsModelFactory(
+        val trainingsModel = ViewModelProvider(
+            this,
+            TrainingsModelFactory(
                 arrayOf(
                     FileTrainingStorage(applicationContext),
                     SharedPrefsTrainingStorage(applicationContext)
@@ -65,9 +70,12 @@ class MainActivity : AppCompatActivity() {
             TrainingsModel::class.java
         )
 
+        trainingsModel.readFromStorage()
+
         // Initialize the devices config model
         ViewModelProvider(
-            this, DevicesModelFactory(
+            this,
+            DevicesModelFactory(
                 arrayOf(
                     SharedPrefsConnectedDevicesStorage(applicationContext)
                 )

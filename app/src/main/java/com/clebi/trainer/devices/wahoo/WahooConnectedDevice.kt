@@ -27,12 +27,12 @@ class WahooConnectedDevice(override val device: Device) : ConnectedDevice, Senso
     private var sensorConnection: SensorConnection? = null
 
     /** status if the device */
-    override var status: DeviceConnectionStatus
-        by Delegates.observable(DeviceConnectionStatus.NOT_CONNECTED) { _, _, _ ->
-            listeners.forEach {
-                it(this)
-            }
+    override var status: DeviceConnectionStatus by
+    Delegates.observable(DeviceConnectionStatus.NOT_CONNECTED) { _, _, _ ->
+        listeners.forEach {
+            it(this)
         }
+    }
 
     /** capabilities of the device */
     override var capabilities: List<DeviceCapability> by Delegates.observable(listOf()) { _, _, _ ->
@@ -74,10 +74,10 @@ class WahooConnectedDevice(override val device: Device) : ConnectedDevice, Senso
             HardwareConnectorEnums.SensorConnectionState.CONNECTED -> DeviceConnectionStatus.CONNECTED
             HardwareConnectorEnums.SensorConnectionState.DISCONNECTING -> DeviceConnectionStatus.DISCONNECTING
         }
-        if (status == DeviceConnectionStatus.CONNECTED) {
-            sensorConnection = connection
+        sensorConnection = if (status == DeviceConnectionStatus.CONNECTED) {
+            connection
         } else {
-            sensorConnection = null
+            null
         }
     }
 

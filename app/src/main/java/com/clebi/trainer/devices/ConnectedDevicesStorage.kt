@@ -5,14 +5,6 @@ package com.clebi.trainer.devices
  */
 interface ConnectedDevicesStorage {
 
-    data class ConnectedDeviceStorageContainer(
-        val saveTime: Long,
-        val storageType: String,
-        val devices: List<ConnectedDevice>
-    ) {
-        val version: Int = 1
-    }
-
     /**
      * Type of the storage implementation.
      */
