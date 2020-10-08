@@ -83,7 +83,7 @@ class TrainingExecService : Service() {
 
     fun start() {
         if (trainer == null || currentTraining == null) {
-            throw IllegalStateException("service not initialzed")
+            throw IllegalStateException("service not initialized")
         }
         if (timer != null) {
             throw IllegalStateException("already executing a training")
@@ -211,6 +211,7 @@ class TrainingExecService : Service() {
             .setContentText(text)
             .setSmallIcon(R.drawable.notif_icon)
             .setContentIntent(pendingIntent)
+            .setOnlyAlertOnce(true)
             .build()
     }
 }
